@@ -23,7 +23,7 @@ public class Sql2oReservationDAO implements ReservationDAO {
     public void add(Reservation reserve) throws DAOException {
         //TODO: Change sql query..
         String sql = "INSERT INTO reservations(" +
-                "user_id, vehicleId, comment) VALUES (:courseId, :rating, :comment)";
+                "vehicle_id, user_id, dates) VALUES (:vehicle_id, :user_id, :dates)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
                     .bind(reserve)
@@ -47,7 +47,7 @@ public class Sql2oReservationDAO implements ReservationDAO {
     public List<Reservation> findByUserId(int userId) {
         try (Connection con = sql2o.open()) {
             //TODO: Check sql query..
-            return con.createQuery("SELECT * FROM rReservations WHERE user_id = :userId")
+            return con.createQuery("SELECT * FROM reservations WHERE user_id = :userId")
                     .addColumnMapping("USER_ID", "userId")
                     .addParameter("userId", userId)
                     .executeAndFetch(Reservation.class);

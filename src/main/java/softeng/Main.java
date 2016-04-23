@@ -24,6 +24,7 @@ import static spark.Spark.staticFileLocation;
 public class Main {
     public static void main(String[] args) {
 
+        //FCC added
         System.out.println("Testing a print to console");
 
         //TODO: Maybe change the name to Route.java??

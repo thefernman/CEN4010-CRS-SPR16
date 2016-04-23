@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS reservations (
 
 CREATE TABLE IF NOT EXISTS specials (
    id INTEGER PRIMARY KEY auto_increment,
+   type VARCHAR,
    discount INTEGER,
 );
 

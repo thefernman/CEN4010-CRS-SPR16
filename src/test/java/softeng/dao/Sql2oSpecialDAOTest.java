@@ -5,24 +5,24 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
-import softeng.dao.users.Sql2oUserDAO;
-import softeng.model.User;
+import softeng.dao.specials.Sql2oSpecialDAO;
+import softeng.model.Special;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Fernando on 4/23/2016.
  */
-public class Sql2oUserDAOTest {
+public class Sql2oSpecialDAOTest {
 
-    private Sql2oUserDAO userDAO;
+    private Sql2oSpecialDAO specialDAO;
     private Connection conn;
 
     @Before
     public void setUp() throws Exception {
         String connectionString = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/init.sql'";
         Sql2o sql2o = new Sql2o(connectionString, "", "");
-        userDAO = new Sql2oUserDAO(sql2o);
+        specialDAO = new Sql2oSpecialDAO(sql2o);
         //Keep connection open through entire test so that it isn't wiped out
         conn = sql2o.open();
     }
@@ -33,13 +33,13 @@ public class Sql2oUserDAOTest {
     }
 
     @Test
-    public void addedUsersAreReturnedFromFindAll() throws Exception {
-        User user = newTestUser();
-        userDAO.add(user);
-        assertEquals(1, userDAO.findAll().size());
+    public void addedSpecialAreReturnedFromFindAll() throws Exception {
+        Special special = newTestSpecial();
+        specialDAO.add(special);
+        assertEquals(1, specialDAO.findAll().size());
     }
 
-    private User newTestUser() {
-        return new User("abc@abc.com", "abc123");
+    private Special newTestSpecial() {
+        return new Special("Holiday Special", 10);
     }
 }

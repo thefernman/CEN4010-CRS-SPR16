@@ -5,24 +5,23 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
-import softeng.dao.users.Sql2oUserDAO;
-import softeng.model.User;
+import softeng.dao.vehicles.Sql2oVehicleDAO;
+import softeng.model.Vehicle;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Fernando on 4/23/2016.
  */
-public class Sql2oUserDAOTest {
-
-    private Sql2oUserDAO userDAO;
+public class Sql2oVehicleDAOTest {
+    private Sql2oVehicleDAO vehicleDAO;
     private Connection conn;
 
     @Before
     public void setUp() throws Exception {
         String connectionString = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/init.sql'";
         Sql2o sql2o = new Sql2o(connectionString, "", "");
-        userDAO = new Sql2oUserDAO(sql2o);
+        vehicleDAO = new Sql2oVehicleDAO(sql2o);
         //Keep connection open through entire test so that it isn't wiped out
         conn = sql2o.open();
     }
@@ -33,13 +32,13 @@ public class Sql2oUserDAOTest {
     }
 
     @Test
-    public void addedUsersAreReturnedFromFindAll() throws Exception {
-        User user = newTestUser();
-        userDAO.add(user);
-        assertEquals(1, userDAO.findAll().size());
+    public void addedVehicleAreReturnedFromFindAll() throws Exception {
+        Vehicle vehicle = newTestVehicle();
+        vehicleDAO.add(vehicle);
+        assertEquals(1, vehicleDAO.findAll().size());
     }
 
-    private User newTestUser() {
-        return new User("abc@abc.com", "abc123");
+    private Vehicle newTestVehicle() {
+        return new Vehicle("Compact", 2001, "Honda", "Civic");
     }
 }

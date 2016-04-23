@@ -36,4 +36,4 @@ CREATE TABLE IF NOT EXISTS specials (
    discount INTEGER,
 );
 
-INSERT INTO users (email, password) VALUES ('fcamp001@fiu.edu', 'fernando');
+-- INSERT INTO users (email, password) VALUES ('fcamp001@fiu.edu', 'fernando');

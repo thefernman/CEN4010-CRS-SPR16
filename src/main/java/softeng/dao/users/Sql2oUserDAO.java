@@ -22,7 +22,7 @@ public class Sql2oUserDAO implements UserDAO {
     @Override
     public void add(User user) throws DAOException {
         //TODO: Change sql query
-        String sql = "INSERT INTO users(name, url) VALUES (:name, :url)";
+        String sql = "INSERT INTO users(email, password) VALUES (:email, :password)";
         try (Connection con = sql2o.open()){
             int id = (int) con.createQuery(sql)
                     .bind(user)

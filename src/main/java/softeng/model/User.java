@@ -12,7 +12,7 @@ public class User {
     private String state;
     private int zipCode;
     private String date_of_birth;
-    private String paymentInfo;
+    private String payment_info;
 
     public User(String email, String password) {
         this.email = email;
@@ -107,11 +107,11 @@ public class User {
         this.date_of_birth = date_of_birth;
     }
 
-    public String getPaymentInfo() {
-        return paymentInfo;
+    public String getPayment_info() {
+        return payment_info;
     }
 
-    public void setPaymentInfo(String paymentInfo) {
-        this.paymentInfo = paymentInfo;
+    public void setPayment_info(String payment_info) {
+        this.payment_info = payment_info;
     }
 }

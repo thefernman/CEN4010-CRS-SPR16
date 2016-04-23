@@ -28,7 +28,7 @@ public class Main {
 
         System.out.println("Testing a print to console");
 
-        //Hello thefernman
+        //Goodbye fernman
 
         //TODO: Maybe change the name to Route.java??
         staticFileLocation("/public");

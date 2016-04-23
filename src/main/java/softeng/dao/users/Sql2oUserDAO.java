@@ -32,6 +32,11 @@ public class Sql2oUserDAO implements UserDAO {
         } catch (Sql2oException ex) {
             throw new DAOException(ex, "problem adding user");
         }
+        System.out.println("Users in DB:");
+        List<User> users = this.findAll();
+        for(int i=0; i < users.size(); i++){
+            System.out.println(users.get(i).getEmail());
+        }
     }
 
     @Override

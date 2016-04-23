@@ -45,6 +45,16 @@ public class Sql2oVehicleDAO implements VehicleDAO {
     }
 
     @Override
+    public List<Vehicle> findAllByType(String type) {
+        try (Connection con = sql2o.open()) {
+            return con.createQuery("SELECT * FROM vehicles WHERE type = " + type)
+                    .executeAndFetch(Vehicle.class);
+        }
+    }
+
+    //TODO: create method to return first car available....maybe....
+
+    @Override
     public Vehicle findById(int id) {
         try (Connection con = sql2o.open()) {
             return con.createQuery("SELECT * FROM vehicles WHERE id = :id")

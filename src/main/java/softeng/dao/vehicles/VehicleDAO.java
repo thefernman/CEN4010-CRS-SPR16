@@ -13,5 +13,8 @@ public interface VehicleDAO {
     //TODO: Maybe change this to boolean?
     void add(Vehicle vehicle) throws DAOException;
     List<Vehicle> findAll();
+
+    List<Vehicle> findAllByType(String type);
+
     Vehicle findById(int id);
 }

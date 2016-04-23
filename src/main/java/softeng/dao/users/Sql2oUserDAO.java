@@ -50,4 +50,17 @@ public class Sql2oUserDAO implements UserDAO {
                     .executeAndFetchFirst(User.class);
         }
     }
+
+    public boolean verifyUserLogin(String email, String password) {
+
+        try (Connection con = sql2o.open()) {
+            User userLoggingIn = con.createQuery("SELECT * FROM users WHERE email = :email AND password = :password")
+                    .addParameter("email", email)
+                    .addParameter("password", password)
+                    .executeAndFetchFirst(User.class);
+
+            return userLoggingIn.getEmail().equals(email) &&
+                        userLoggingIn.getPassword().equals(password);
+        }
+    }
 }

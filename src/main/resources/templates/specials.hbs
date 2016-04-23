@@ -1,0 +1,13 @@
+{{#partial "content"}}
+    <h2>Current Specials</h2>
+    <ul>
+        {{#each specials}}
+            <li>
+                <a href="/specials/{{ id }}">{{ name }}</a> ( {{ discount }} votes)
+            </li>
+        {{/each}}
+    </ul>
+
+{{/partial}}
+
+{{> index.hbs}}

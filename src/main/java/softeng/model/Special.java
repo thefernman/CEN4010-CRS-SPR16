@@ -6,10 +6,12 @@ package softeng.model;
 public class Special {
 
     private int id;
+    private String name;
     private int discount;
 
-    public Special(int discount) {
+    public Special(String name, int discount) {
         this.discount = discount;
+        this.name = name;
     }
 
     public int getId() {
@@ -26,5 +28,13 @@ public class Special {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -14,6 +14,7 @@
     <orderEntry type="library" name="Gradle: com.sparkjava:spark-template-handlebars:2.3" level="project" />
     <orderEntry type="library" name="Gradle: org.sql2o:sql2o:1.5.4" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.6.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.h2database:h2:1.4.191" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.11" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.12" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-simple:1.7.12" level="project" />

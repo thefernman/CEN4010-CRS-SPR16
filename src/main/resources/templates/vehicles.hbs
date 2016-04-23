@@ -1,0 +1,13 @@
+{{#partial "content"}}
+    <h2>Vehicles</h2>
+    <ul>
+        {{#each vehicles}}
+            <li>
+                <a href="/vehicles/{{ id }}">{{ manufacturer }}</a> ( {{ model }} votes)
+            </li>
+        {{/each}}
+    </ul>
+
+{{/partial}}
+
+{{> index.hbs}}

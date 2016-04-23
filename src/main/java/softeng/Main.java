@@ -37,7 +37,6 @@ public class Main {
                 String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
 
         UserDAO userDAO = new Sql2oUserDAO(sql2o);
-        String testtest = "hello jam";
         VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
         ReservationDAO reservationDAO = new Sql2oReservationDAO(sql2o);
         SpecialDAO specialDAO = new Sql2oSpecialDAO(sql2o);

@@ -22,7 +22,7 @@ public class Sql2oSpecialDAO implements SpecialDAO {
     @Override
     public void add(Special special) throws DAOException {
         //TODO: Change sql query..
-        String sql = "INSERT INTO specials(name, discount) VALUES (:name, :discount)";
+        String sql = "INSERT INTO specials(name, url) VALUES (:name, :url)";
         try (Connection con = sql2o.open()){
             int id = (int) con.createQuery(sql)
                     .bind(special)

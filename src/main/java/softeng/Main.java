@@ -10,9 +10,7 @@ import softeng.dao.users.Sql2oUserDAO;
 import softeng.dao.users.UserDAO;
 import softeng.dao.vehicles.Sql2oVehicleDAO;
 import softeng.dao.vehicles.VehicleDAO;
-import softeng.model.Special;
 import softeng.model.User;
-import softeng.model.Vehicle;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 

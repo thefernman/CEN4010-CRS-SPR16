@@ -26,6 +26,8 @@ import static spark.Spark.staticFileLocation;
 public class Main {
     public static void main(String[] args) {
 
+        System.out.println("Testing a print to console");
+
         //Hello thefernman
 
         //TODO: Maybe change the name to Route.java??
@@ -59,9 +61,10 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         post("/registration", (request, response) -> {
+            System.out.println("Get a post from registration");
             String email = request.queryParams("email");
-            User newUser = new User(
-                    email, request.queryParams("password"));
+            User newUser = new User(email, request.queryParams("password"));
+            System.out.println("Values received: " + email + ", " +  request.queryParams("password"));
             userDAO.add(newUser);
             request.session().attribute("email", email);
             response.redirect("/");

@@ -24,7 +24,7 @@ public class Sql2oVehicleDAO implements VehicleDAO {
     @Override
     public void add(Vehicle vehicle) throws DAOException {
         //TODO: Change sql query..
-        String sql = "INSERT INTO vehicles(type, year, manufacturer, model) VALUES (:type, :year, :manufacturer, :model)";
+        String sql = "INSERT INTO vehicles(name, url) VALUES (:name, :url)";
         try (Connection con = sql2o.open()){
             int id = (int) con.createQuery(sql)
                     .bind(vehicle)

@@ -26,6 +26,8 @@ import static spark.Spark.staticFileLocation;
 public class Main {
     public static void main(String[] args) {
 
+        //Hello thefernman
+
         //TODO: Maybe change the name to Route.java??
         staticFileLocation("/public");
 

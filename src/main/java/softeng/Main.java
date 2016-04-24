@@ -1,10 +1,10 @@
 package softeng;
 
 import com.google.gson.Gson;
+import com.sun.org.apache.xml.internal.serializer.utils.SystemIDResolver;
 import com.sun.org.apache.xpath.internal.operations.Mod;
-//import com.sun.org.apache.xpath.internal.operations.String;
-//import com.sun.org.apache.xpath.internal.operations.String;
 import org.sql2o.Sql2o;
+import softeng.controller.UserSessionController;
 import softeng.dao.reservations.ReservationDAO;
 import softeng.dao.reservations.Sql2oReservationDAO;
 import softeng.dao.specials.SpecialDAO;
@@ -39,10 +39,28 @@ public class Main {
         Sql2o sql2o = new Sql2o(
                 String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
 
-        UserDAO userDAO = new Sql2oUserDAO(sql2o);
+        //UserDAO userDAO = new Sql2oUserDAO(sql2o);
         VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
         ReservationDAO reservationDAO = new Sql2oReservationDAO(sql2o);
         SpecialDAO specialDAO = new Sql2oSpecialDAO(sql2o);
+
+        UserSessionController sessionController = new UserSessionController();
+
+//        for (int i = 0; i < 6; i++) {
+//            Vehicle newVeh = new Vehicle("type" + i, 200 + i, "manufacturer" + i , "model"+i);
+//            try{
+//                vehicleDAO.add(newVeh);
+//                System.out.println(newVeh.getModel() + " added to database");
+//            }catch(Exception e){
+//                System.out.println("Error from adding vehicle");
+//            }
+//
+//        }
+//
+//        List<Vehicle> veh = vehicleDAO.findAll();
+//        for(int i=0; i < veh.size(); i++){
+//            System.out.println(veh.get(i).getModel());
+//        }
 
         //In case we use json objects..
         Gson gson = new Gson();
@@ -51,65 +69,91 @@ public class Main {
             Home Page Route
          */
         get("/", (request, response) -> {
-
-            return new ModelAndView(null, "index.hbs");
+            return new ModelAndView(sessionController.getSessionModel(request), "index.hbs"); //returned model map may have zero entries
         }, new HandlebarsTemplateEngine());
 
         /*
             Registration Route
          */
         get("/registration", (request, response) -> {
-            return new ModelAndView(null, "registration.hbs");
+            return new ModelAndView(sessionController.getSessionModel(request), "registration.hbs"); //returned model map may have zero entries
         }, new HandlebarsTemplateEngine());
 
         post("/registration", (request, response) -> {
-            System.out.println("Get a post from registration");
+            System.out.println("page: /registration\nurl: "+request.url()+"\nsession_is_new: "+request.session().isNew());
 
-            String email = request.queryParams("email");
-            String password = request.queryParams("password");
+            User user = sessionController.createUser(request.queryParams("email"), request.queryParams("password"),"member");
+            sessionController.setSessionAttributes(request,user);
+            Map<String, Object> model = sessionController.getSessionModel(request);
 
-            User newUser = new User(email, password);
+            model.put("registration_is_new",true); //if new registration, display welcome on /registration
 
-            System.out.println("Values received: " + newUser.getEmail() + ", " +  newUser.getPassword());
-
-            userDAO.add(newUser);
-            Session session = request.session();
-            session.attribute("email", email);
-
-            request.session().attribute("email", session.attribute("email"));
-            System.out.println("Session user: " + request.session().attribute("email"));
-
-            response.redirect("/");
-
-            return null;
-        });
+            return new ModelAndView(model, "registration.hbs");
+        }, new HandlebarsTemplateEngine());
 
         /*
         Login
          */
+        //TODO: when a user logs in, return them to the page they were originally on with the state preserved instead of index.hbs
         post("/sign-in", (request, response) -> {
-
-            Map<String, String> model = new HashMap<>();
+            System.out.println("page: /sign-in\nSession: "+request.session());
 
             String email = request.queryParams("email");
             String password = request.queryParams("password");
-            //fetch all user attributes from db and use them to populate the session object.user attributes
-            model.put("email", email);
+
+//            if(sessionController.loginCredentialsAreValid(email,password))
+//            {
+//                User user = userDAO.findByEmail(email);
+//                System.out.print("Login attempted by user: ");
+//                System.out.println(user);
+//
+//                System.out.println("with attributes: \n");
+//                for (String attr : request.session().attributes()){
+//                    System.out.println(attr+"="+request.session().attribute(attr));
+//                }
+//                System.out.println("and db users: \n");
+//                for (Object obj : userDAO.findAll()){
+//                    System.out.println(obj);
+//                }
+//                System.out.println("valid: yes");
+//            }
+//            System.out.println("valid: no");
+            return new ModelAndView(sessionController.getSessionModel(request), "index.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/sign-out", (request, response) -> {
+            System.out.println("/sign-out");
+            System.out.println("Session: "+request.session());
+
+            String email = request.queryParams("email");
+            String password = request.queryParams("password");
 
             //if(userDAO.verifyUserLogin(email,password))
             //{
-                User user = userDAO.findByEmail(email);
-                System.out.println("Login attempted by user:\n");
-                System.out.println(user);
-                request.session(true);
-                request.session().attribute("user", user);
-                //request.session().attribute("usertype", user.getType());
+//                User user = userDAO.findByEmail(email);
+//                System.out.print("Login attempted by user: ");
+//                System.out.println(user);
+//
+            System.out.println("with attributes: \n");
+            for (String attr : request.session().attributes()){
+                System.out.println(attr+"="+request.session().attribute(attr));
+            }
+//                System.out.println("and db users: \n");
+//                for (Object obj : userDAO.findAll()){
+//                    System.out.println(obj);
+//                }
             //}
-            response.redirect("/");
-            return null;
-        });
 
+            Map<String, Object> model = new HashMap<>();
 
+            model.put("user_email", request.session().attribute("user_email"));
+            model.put("user_type", request.session().attribute("user_type"));
+            model.put("user_id", request.session().attribute("user_id"));
+            model.put("user_is_admin", request.session().attribute("user_is_admin"));
+            model.put("user_is_member", request.session().attribute("user_is_member"));
+
+            return new ModelAndView(model, "index.hbs");
+        }, new HandlebarsTemplateEngine());
         /*
         View Vehicles
          */

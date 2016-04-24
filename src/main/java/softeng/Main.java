@@ -101,22 +101,27 @@ public class Main {
             String email = request.queryParams("email");
             String password = request.queryParams("password");
 
-//            if(sessionController.loginCredentialsAreValid(email,password))
-//            {
-//                User user = userDAO.findByEmail(email);
-//                System.out.print("Login attempted by user: ");
-//                System.out.println(user);
-//
-//                System.out.println("with attributes: \n");
-//                for (String attr : request.session().attributes()){
-//                    System.out.println(attr+"="+request.session().attribute(attr));
-//                }
-//                System.out.println("and db users: \n");
-//                for (Object obj : userDAO.findAll()){
-//                    System.out.println(obj);
-//                }
-//                System.out.println("valid: yes");
-//            }
+            //Map<String, Object> model;
+
+            if(sessionController.loginCredentialsAreValid(email,password))
+            {
+                User user = sessionController.findByEmail(email);
+                sessionController.setSessionAttributes(request,user);
+                //model = sessionController.getSessionModel(request);
+
+                System.out.print("Login attempted by user: ");
+                System.out.println(user);
+
+                System.out.println("with attributes: \n");
+                for (String attr : request.session().attributes()){
+                    System.out.println(attr+"="+request.session().attribute(attr));
+                }
+                System.out.println("and db users: \n");
+                for (Object obj : sessionController.findAll()){
+                    System.out.println(obj);
+                }
+                System.out.println("valid: yes");
+            }
 //            System.out.println("valid: no");
             return new ModelAndView(sessionController.getSessionModel(request), "index.hbs");
         }, new HandlebarsTemplateEngine());
@@ -158,13 +163,13 @@ public class Main {
         View Vehicles
          */
         get("/viewvehicles", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
+            Map<String, Object> model = sessionController.getSessionModel(request);
             model.put("vehicles", vehicleDAO.findAll());
             return new ModelAndView(model, "viewvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/displayvehicles", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
+            Map<String, Object> model = sessionController.getSessionModel(request);
             Vehicle selectedVehicle = new Vehicle("car", 1990, request.queryParams("mydropdown2"), request.queryParams("mydropdown1"));
             String carModel = request.queryParams("mydropdown1");
             String manufacturer = request.queryParams("mydropdown2");

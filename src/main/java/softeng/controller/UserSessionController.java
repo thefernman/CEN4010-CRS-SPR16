@@ -7,6 +7,7 @@ import softeng.model.User;
 import spark.Request;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import softeng.dao.users.Sql2oUserDAO;
@@ -67,5 +68,11 @@ public class UserSessionController {
 
         }
         return validity;
+    }
+    public User findByEmail(String email){
+        return userDAO.findByEmail(email);
+    }
+    public List<User> findAll(){
+        return userDAO.findAll();
     }
 }

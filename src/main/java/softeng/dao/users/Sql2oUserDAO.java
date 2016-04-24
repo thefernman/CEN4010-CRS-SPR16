@@ -67,7 +67,7 @@ public class Sql2oUserDAO implements UserDAO {
     }
     //TODO: Fix this shit
     public boolean verifyUserLogin(String email, String password) throws DAOException {
-
+        System.out.println("verifying login for user with email: "+email+" and password: "+password);
         try (Connection con = sql2o.open()) {
             User userLoggingIn = con.createQuery("SELECT * FROM users WHERE email = :email AND password = :password")
                     .addParameter("email", email)

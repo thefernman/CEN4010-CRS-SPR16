@@ -15,6 +15,7 @@ import softeng.model.Special;
 import softeng.model.User;
 import softeng.model.Vehicle;
 import spark.ModelAndView;
+import spark.Session;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;
@@ -64,6 +65,7 @@ public class Main {
             Home Page Route
          */
         get("/", (request, response) -> {
+
             return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -76,16 +78,23 @@ public class Main {
 
         post("/registration", (request, response) -> {
             System.out.println("Get a post from registration");
+
             String email = request.queryParams("email");
             String password = request.queryParams("password");
+
             User newUser = new User(email, password);
 
             System.out.println("Values received: " + newUser.getEmail() + ", " +  newUser.getPassword());
 
             userDAO.add(newUser);
-            request.session().attribute("email", email);
+            Session session = request.session();
+            session.attribute("email", email);
+
+            request.session().attribute("email", session.attribute("email"));
+            System.out.println("Session user: " + request.session().attribute("email"));
+
             response.redirect("/");
-            userDAO.findAll().forEach(user -> System.out.println(user.getEmail()));
+
             return null;
         });
 

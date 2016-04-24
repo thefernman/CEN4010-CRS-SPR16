@@ -66,4 +66,8 @@ public class Vehicle {
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
     }
+
+    public String getInfo(){
+        return "Vehicle Info: " +id +", " + type + ", "+ year + ", "+ manufacturer + ", "+ model;
+    }
 }

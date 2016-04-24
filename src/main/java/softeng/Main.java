@@ -2,6 +2,8 @@ package softeng;
 
 import com.google.gson.Gson;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+//import com.sun.org.apache.xpath.internal.operations.String;
+//import com.sun.org.apache.xpath.internal.operations.String;
 import org.sql2o.Sql2o;
 import softeng.dao.reservations.ReservationDAO;
 import softeng.dao.reservations.Sql2oReservationDAO;
@@ -41,22 +43,6 @@ public class Main {
         VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
         ReservationDAO reservationDAO = new Sql2oReservationDAO(sql2o);
         SpecialDAO specialDAO = new Sql2oSpecialDAO(sql2o);
-
-//        for (int i = 0; i < 6; i++) {
-//            Vehicle newVeh = new Vehicle("type" + i, 200 + i, "manufacturer" + i , "model"+i);
-//            try{
-//                vehicleDAO.add(newVeh);
-//                System.out.println(newVeh.getModel() + " added to database");
-//            }catch(Exception e){
-//                System.out.println("Error from adding vehicle");
-//            }
-//
-//        }
-//
-//        List<Vehicle> veh = vehicleDAO.findAll();
-//        for(int i=0; i < veh.size(); i++){
-//            System.out.println(veh.get(i).getModel());
-//        }
 
         //In case we use json objects..
         Gson gson = new Gson();
@@ -122,6 +108,8 @@ public class Main {
             response.redirect("/");
             return null;
         });
+
+
         /*
         View Vehicles
          */
@@ -133,13 +121,21 @@ public class Main {
 
         post("/displayvehicles", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
-            Vehicle selectedVehicle = new Vehicle("car", 1990, request.queryParams("mydropdown2"), request.queryParams("mydropdown1"));
-            String carModel = request.queryParams("mydropdown1");
-            String manufacturer = request.queryParams("mydropdown2");
-            System.out.println(carModel + "," + manufacturer);
-            model.put("vehicle", selectedVehicle);
+            String type = request.queryParams("selection");
+            List<Vehicle> typeSelection = vehicleDAO.findAllByType(type);
+            model.put("vehicle", typeSelection);
             return new ModelAndView(model, "displayvehicles.hbs");
         }, new HandlebarsTemplateEngine());
+
+        post("/checkout", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int id = Integer.parseInt(request.queryParams("selection"));
+            Vehicle carSelection = vehicleDAO.findById(id);
+            model.put("vehicle", carSelection);
+            return new ModelAndView(model, "checkout.hbs");
+        }, new HandlebarsTemplateEngine());
+
+
         /*
         View Specials
          */

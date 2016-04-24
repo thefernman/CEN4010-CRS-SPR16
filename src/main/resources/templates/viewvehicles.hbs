@@ -2,17 +2,9 @@
     <h1>View Cars</h1>
     <div>
         <form name="myform" action="/displayvehicles" method="POST">
-                <select input type="text" name="mydropdown1">
-                    {{#each vehicles}}
-                        <option value ={{ model }}>{{ model }}</option>
-                    {{/each}}
-                </select>
-                <select input type="text" name="mydropdown2">
-                    {{#each vehicles}}
-                        <option value ={{ manufacturer }}>{{ manufacturer }}</option>
-                    {{/each}}
-                </select>
-            <button type="submit" class="btn btn-success">Search</button>
+            <button type="submit" class="btn btn-success" name="selection" value="compact">Compact</button>
+            <button type="submit" class="btn btn-success" name="selection" value="midsize">Mid Size Sedan</button>
+            <button type="submit" class="btn btn-success" name="selection" value="suv">SUV</button>
         </form>
     </div>
 {{/partial}}

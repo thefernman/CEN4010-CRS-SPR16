@@ -37,18 +37,20 @@
             <div id="navbar" class="navbar-collapse collapse">
                 {{#if user_is_member}} <!-- is session.user is not null -->
                 <div class="navbar-form navbar-right-member">
-                    <div class="form-group">
+                    <!--div class="form-group">
                         <input type="search" placeholder="Search vehicles" class="form-control">
-                    </div>
+                    </div-->
                     <a class="btn btn-default" href="/vehicles" role="button">Browse vehicles</a>
+                    <a class="btn btn-success" href="/sign-out" role="button">Sign out</a>
                 </div>
                 {{else}}
                     {{#if user_is_admin}} <!-- is session.user is not null -->
                     <div class="navbar-form navbar-right-admin">
-                        <div class="form-group">
+                        <!--div class="form-group">
                             <input type="search" placeholder="Search vehicles" class="form-control">
-                        </div>
+                        </div-->
                         <a class="btn btn-default" href="/vehicles" role="button">Browse vehicles</a>
+                        <a class="btn btn-success" href="/sign-out" role="button">Sign out</a>
                     </div>
                     {{else}} <!-- is session.user is null -->
                     <form action="/sign-in" method="post" class="navbar-form navbar-right-guest">

@@ -101,8 +101,6 @@ public class Main {
             String email = request.queryParams("email");
             String password = request.queryParams("password");
 
-            //Map<String, Object> model;
-
             if(sessionController.loginCredentialsAreValid(email,password))
             {
                 User user = sessionController.findByEmail(email);
@@ -126,38 +124,12 @@ public class Main {
             return new ModelAndView(sessionController.getSessionModel(request), "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-        post("/sign-out", (request, response) -> {
-            System.out.println("/sign-out");
-            System.out.println("Session: "+request.session());
-
-            String email = request.queryParams("email");
-            String password = request.queryParams("password");
-
-            //if(userDAO.verifyUserLogin(email,password))
-            //{
-//                User user = userDAO.findByEmail(email);
-//                System.out.print("Login attempted by user: ");
-//                System.out.println(user);
-//
-            System.out.println("with attributes: \n");
+        get("/sign-out", (request, response) -> {
             for (String attr : request.session().attributes()){
-                System.out.println(attr+"="+request.session().attribute(attr));
+                System.out.println("removing attr: " + request.session().attribute(attr));
+                request.session().removeAttribute(attr);
             }
-//                System.out.println("and db users: \n");
-//                for (Object obj : userDAO.findAll()){
-//                    System.out.println(obj);
-//                }
-            //}
-
-            Map<String, Object> model = new HashMap<>();
-
-            model.put("user_email", request.session().attribute("user_email"));
-            model.put("user_type", request.session().attribute("user_type"));
-            model.put("user_id", request.session().attribute("user_id"));
-            model.put("user_is_admin", request.session().attribute("user_is_admin"));
-            model.put("user_is_member", request.session().attribute("user_is_member"));
-
-            return new ModelAndView(model, "index.hbs");
+            return new ModelAndView(sessionController.getSessionModel(request), "index.hbs");
         }, new HandlebarsTemplateEngine());
         /*
         View Vehicles
@@ -181,7 +153,7 @@ public class Main {
         View Specials
          */
         get("/specials", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
+            Map<String, Object> model = sessionController.getSessionModel(request);
             model.put("specials", specialDAO.findAll());
             return new ModelAndView(model, "specials.hbs");
         }, new HandlebarsTemplateEngine());

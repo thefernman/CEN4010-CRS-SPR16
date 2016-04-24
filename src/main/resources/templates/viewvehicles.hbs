@@ -1,0 +1,11 @@
+{{#partial "content"}}
+    <h1>View Cars</h1>
+
+    <ul>
+        {{#each vehicles}}
+            <li>{{ model }} , {{ manufacturer }}</li>
+        {{/each}}
+    </ul>
+{{/partial}}
+
+{{>index.hbs}}

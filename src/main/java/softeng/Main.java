@@ -11,10 +11,12 @@ import softeng.dao.users.UserDAO;
 import softeng.dao.vehicles.Sql2oVehicleDAO;
 import softeng.dao.vehicles.VehicleDAO;
 import softeng.model.User;
+import softeng.model.Vehicle;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.get;
@@ -25,6 +27,8 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println("Testing a print to console");
+
+
 
         //TODO: Maybe change the name to Route.java??
         staticFileLocation("/public");
@@ -38,6 +42,22 @@ public class Main {
         VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
         ReservationDAO reservationDAO = new Sql2oReservationDAO(sql2o);
         SpecialDAO specialDAO = new Sql2oSpecialDAO(sql2o);
+
+//        for (int i = 0; i < 6; i++) {
+//            Vehicle newVeh = new Vehicle("type" + i, 200 + i, "manufacturer" + i , "model"+i);
+//            try{
+//                vehicleDAO.add(newVeh);
+//                System.out.println(newVeh.getModel() + " added to database");
+//            }catch(Exception e){
+//                System.out.println("Error from adding vehicle");
+//            }
+//
+//        }
+//
+//        List<Vehicle> veh = vehicleDAO.findAll();
+//        for(int i=0; i < veh.size(); i++){
+//            System.out.println(veh.get(i).getModel());
+//        }
 
         //In case we use json objects..
         Gson gson = new Gson();
@@ -83,10 +103,10 @@ public class Main {
         /*
         View Vehicles
          */
-        get("/vehicles", (request, response) -> {
+        get("/viewvehicles", (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             model.put("vehicles", vehicleDAO.findAll());
-            return new ModelAndView(model, "vehicles.hbs");
+            return new ModelAndView(model, "viewvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
         /*

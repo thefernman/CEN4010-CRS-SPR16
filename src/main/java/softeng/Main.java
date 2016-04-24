@@ -17,6 +17,7 @@ import softeng.model.Special;
 import softeng.model.User;
 import softeng.model.Vehicle;
 import spark.ModelAndView;
+import spark.Session;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;

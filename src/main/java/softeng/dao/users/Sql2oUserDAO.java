@@ -22,14 +22,15 @@ public class Sql2oUserDAO implements UserDAO {
     @Override
     public void add(User user) throws DAOException {
         //TODO: Change sql query
+        //TODO: Inform caller of already registered user
         String sql = "INSERT INTO users(email, password) VALUES (:email, :password)";
-        try (Connection con = sql2o.open()){
+        try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
                     .bind(user)
                     .executeUpdate()
                     .getKey();
             user.setId(id);
-        } catch (Sql2oException ex) {
+        }catch(Sql2oException ex){
             throw new DAOException(ex, "problem adding user");
         }
 //        System.out.println("Users in DB:");
@@ -56,7 +57,15 @@ public class Sql2oUserDAO implements UserDAO {
         }
     }
 
-    public boolean verifyUserLogin(String email, String password) {
+    public User findByEmail(String email) {
+        try (Connection con = sql2o.open()) {
+            return con.createQuery("SELECT * FROM users WHERE email = :email")
+                    .addParameter("email", email)
+                    .executeAndFetchFirst(User.class);
+        }
+    }
+    //TODO: Fix this shit
+    public boolean verifyUserLogin(String email, String password) throws DAOException {
 
         try (Connection con = sql2o.open()) {
             User userLoggingIn = con.createQuery("SELECT * FROM users WHERE email = :email AND password = :password")
@@ -66,6 +75,8 @@ public class Sql2oUserDAO implements UserDAO {
 
             return userLoggingIn.getEmail().equals(email) &&
                         userLoggingIn.getPassword().equals(password);
+        }catch(Sql2oException ex){
+            throw new DAOException(ex, "problem logging in with username " + email + " and password " + password);
         }
     }
 }

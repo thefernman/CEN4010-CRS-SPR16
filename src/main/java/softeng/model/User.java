@@ -28,6 +28,10 @@ public class User {
         return "User{" +
                 "email='" + email + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", type='" + type + '\'' +
+                ", id='" + id + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 
@@ -42,6 +46,12 @@ public class User {
     public void setType(String type) {
         this.type = type;
     }
+
+    /* The Handlebars {{#if}} expression tests for truth only. We can circumvent this
+       limitation by either creating helpers or by creating these boolean functions */
+    public boolean isAdmin(){ return type.equals("admin"); }
+
+    public boolean isMember(){ return type.equals("member"); }
 
     public String getEmail() {
         return email;

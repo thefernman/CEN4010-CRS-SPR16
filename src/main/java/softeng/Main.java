@@ -10,6 +10,7 @@ import softeng.dao.users.Sql2oUserDAO;
 import softeng.dao.users.UserDAO;
 import softeng.dao.vehicles.Sql2oVehicleDAO;
 import softeng.dao.vehicles.VehicleDAO;
+import softeng.model.Special;
 import softeng.model.User;
 import softeng.model.Vehicle;
 import spark.ModelAndView;
@@ -62,7 +63,6 @@ public class Main {
             Home Page Route
          */
         get("/", (request, response) -> {
-            userDAO.findAll().forEach(System.out::println);
             return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -90,8 +90,22 @@ public class Main {
         post("/sign-in", (request, response) -> {
 
             Map<String, String> model = new HashMap<>();
+
             String email = request.queryParams("email");
             String password = request.queryParams("password");
+
+            //fetch all user attributes from db and use them to populate the session object.user attributes
+            model.put("email", email);
+
+            //if(userDAO.verifyUserLogin(email,password))
+            //{
+                User user = userDAO.findByEmail(email);
+                System.out.println("Login attempted by user:\n");
+                System.out.println(user);
+                request.session(true);
+                request.session().attribute("user", user);
+                //request.session().attribute("usertype", user.getType());
+            //}
             response.redirect("/");
             return null;
         });

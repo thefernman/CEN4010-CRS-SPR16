@@ -46,22 +46,6 @@ public class Main {
 
         UserSessionController sessionController = new UserSessionController();
 
-//        for (int i = 0; i < 6; i++) {
-//            Vehicle newVeh = new Vehicle("type" + i, 200 + i, "manufacturer" + i , "model"+i);
-//            try{
-//                vehicleDAO.add(newVeh);
-//                System.out.println(newVeh.getModel() + " added to database");
-//            }catch(Exception e){
-//                System.out.println("Error from adding vehicle");
-//            }
-//
-//        }
-//
-//        List<Vehicle> veh = vehicleDAO.findAll();
-//        for(int i=0; i < veh.size(); i++){
-//            System.out.println(veh.get(i).getModel());
-//        }
-
         //In case we use json objects..
         Gson gson = new Gson();
 

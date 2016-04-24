@@ -19,7 +19,7 @@ public class Sql2oVehicleDAOTest {
 
     @Before
     public void setUp() throws Exception {
-        String connectionString = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/init.sql'";
+        String connectionString = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/init_test.sql'";
         Sql2o sql2o = new Sql2o(connectionString, "", "");
         vehicleDAO = new Sql2oVehicleDAO(sql2o);
         //Keep connection open through entire test so that it isn't wiped out

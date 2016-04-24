@@ -24,8 +24,6 @@ import static spark.Spark.staticFileLocation;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("Testing a print to console");
-
         //TODO: Maybe change the name to Route.java??
         staticFileLocation("/public");
 
@@ -46,6 +44,7 @@ public class Main {
             Home Page Route
          */
         get("/", (request, response) -> {
+            userDAO.findAll().forEach(System.out::println);
             return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -75,8 +74,6 @@ public class Main {
             Map<String, String> model = new HashMap<>();
             String email = request.queryParams("email");
             String password = request.queryParams("password");
-
-            model.put("email", email);
             response.redirect("/");
             return null;
         });

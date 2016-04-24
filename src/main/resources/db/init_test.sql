@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
    id int PRIMARY KEY auto_increment,
    type VARCHAR,
@@ -13,7 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
    date_of_birth VARCHAR,
    payment_info VARCHAR
 );
-DROP TABLE IF EXISTS vehicles;
 CREATE TABLE IF NOT EXISTS vehicles (
    id INTEGER PRIMARY KEY auto_increment,
    type VARCHAR,
@@ -37,5 +35,3 @@ CREATE TABLE IF NOT EXISTS specials (
    name VARCHAR,
    discount INTEGER,
 );
-
-INSERT INTO users (email, password, type) VALUES ('fcamp001@fiu.edu', 'fernando', 'Admin');

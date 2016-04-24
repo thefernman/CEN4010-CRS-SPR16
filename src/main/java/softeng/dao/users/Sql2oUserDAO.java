@@ -23,12 +23,13 @@ public class Sql2oUserDAO implements UserDAO {
     public void add(User user) throws DAOException {
         //TODO: Change sql query
         //TODO: Inform caller of already registered user
-        String sql = "INSERT INTO users(email, password) VALUES (:email, :password)";
+        String sql = "INSERT INTO users(email, password, type) VALUES (:email, :password, :type)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql)
                     .bind(user)
                     .executeUpdate()
                     .getKey();
+            System.out.println("adding user with id: "+id);
             user.setId(id);
         }catch(Sql2oException ex){
             throw new DAOException(ex, "problem adding user");

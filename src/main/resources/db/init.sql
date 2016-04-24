@@ -38,4 +38,4 @@ CREATE TABLE IF NOT EXISTS specials (
    discount INTEGER,
 );
 
-INSERT INTO users (email, password, type) VALUES ('fcamp001@fiu.edu', 'fernando', 'Admin');
+//INSERT INTO users (email, password, type) VALUES ('fcamp001@fiu.edu', 'fernando', 'Admin');

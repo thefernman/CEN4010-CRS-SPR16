@@ -1,19 +1,26 @@
-//TODO: add "reservation accepted" page including button/link to "proceed to log in" that leads back to the home page (that has the login fields already)
+<!--TODO: add "reservation accepted" page including button/link to "proceed to log in" that leads back to the home page (that has the login fields already)-->
 {{#partial "content"}}
     <div class="container-fluid">
         <section class="container">
             <div class="container-page">
+                {{#if registration_is_new}}
+                <div class="col-md-6">
+                    <h3 class="dark-grey">Thank you for registering with Car Rental System!</h3>
+                    <p>You have been automatically logged in.</p>
+                    <a class="btn btn-default" href="/" role="button">Return to home</a>
+                </div>
+                {{else}}
                 <form action="/registration" method="post" class="col-md-6">
                     <h3 class="dark-grey">Registration</h3>
 
                     <div class="form-group col-lg-6">
                         <label>Email Address</label>
-                        <input type="" name="email" class="form-control" id="" value="">
+                        <input type="" class="form-control" name="email" value="">
                     </div>
 
                     <div class="form-group col-lg-6">
                         <label>Password</label>
-                        <input type="password" name="password" class="form-control" id="" value="">
+                        <input type="password" class="form-control" name="password" value="">
                     </div>
 
                     <div class="form-group col-lg-6">
@@ -40,6 +47,7 @@
                         Acceptance of an order by us is dependent on our suppliers ability to provide the product. (Paragraph 13.5.6)
                     </p>
                 </div>
+                {{/if}}
             </div>
         </section>
     </div>

@@ -30,7 +30,7 @@ public class Sql2oUserDAO implements UserDAO {
                     .executeUpdate()
                     .getKey();
             user.setId(id);
-        }catch(Sql2oException ex){
+        } catch (Sql2oException ex) {
             throw new DAOException(ex, "problem adding user");
         }
 //        System.out.println("Users in DB:");
@@ -64,6 +64,19 @@ public class Sql2oUserDAO implements UserDAO {
                     .executeAndFetchFirst(User.class);
         }
     }
+
+    @Override
+    public void updateUserInDB(User user) {
+        String sql = "UPDATE users " +
+                "SET firstName = :firstName, lastName = :lastName, address = :address, city = :city, state = :state " +
+                "WHERE email = :email";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .bind(user)
+                    .executeUpdate();
+        }
+    }
+
     //TODO: Fix this shit
     public boolean verifyUserLogin(String email, String password) throws DAOException {
 
@@ -72,10 +85,13 @@ public class Sql2oUserDAO implements UserDAO {
                     .addParameter("email", email)
                     .addParameter("password", password)
                     .executeAndFetchFirst(User.class);
-
-            return userLoggingIn.getEmail().equals(email) &&
+            if (userLoggingIn != null) {
+                return userLoggingIn.getEmail().equals(email) &&
                         userLoggingIn.getPassword().equals(password);
-        }catch(Sql2oException ex){
+            } else {
+                return false;
+            }
+        } catch (Sql2oException ex) {
             throw new DAOException(ex, "problem logging in with username " + email + " and password " + password);
         }
     }

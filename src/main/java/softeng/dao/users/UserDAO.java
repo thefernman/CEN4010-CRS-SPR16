@@ -15,4 +15,6 @@ public interface UserDAO {
     User findById(int id);
     boolean verifyUserLogin(String email, String password) throws DAOException;
     User findByEmail(String email);
+
+    void updateUserInDB(User user);
 }

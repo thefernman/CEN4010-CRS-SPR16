@@ -27,8 +27,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
                 ", type='" + type + '\'' +
                 ", id='" + id + '\'' +
                 ", password='" + password + '\'' +

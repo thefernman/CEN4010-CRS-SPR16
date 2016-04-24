@@ -110,15 +110,16 @@ public class Main {
             //fetch all user attributes from db and use them to populate the session object.user attributes
             model.put("email", email);
 
-            //if(userDAO.verifyUserLogin(email,password))
-            //{
+//            if(userDAO.verifyUserLogin(email,password))
+//            {
                 User user = userDAO.findByEmail(email);
                 System.out.println("Login attempted by user:\n");
                 System.out.println(user);
-                request.session(true);
-                request.session().attribute("user", user);
+
+                request.session().attribute("email", user.getEmail());
                 //request.session().attribute("usertype", user.getType());
-            //}
+                System.out.println("Session user: " + request.session().attribute("email"));
+//            }
             response.redirect("/");
             return null;
         });
@@ -148,5 +149,37 @@ public class Main {
             model.put("specials", specialDAO.findAll());
             return new ModelAndView(model, "specials.hbs");
         }, new HandlebarsTemplateEngine());
+
+        get("/editprofile", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            String user_email = request.session().attribute("user_email");
+
+            User toBeEdited = userDAO.findByEmail(user_email);
+            System.out.println("from get editprofile: " + toBeEdited);
+            model.put("user", toBeEdited);
+            return new ModelAndView(model, "editProfile.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/editprofile", (request, response) -> {
+            String firstName = request.queryParams("firstName");
+            String lastName = request.queryParams("lastName");
+            String email = request.queryParams("email");
+            String address = request.queryParams("address");
+            String city = request.queryParams("city");
+            String state = request.queryParams("state");
+
+            User toBeUpdated = userDAO.findByEmail(email);
+
+            toBeUpdated.setFirstName(firstName);
+            toBeUpdated.setLastName(lastName);
+            toBeUpdated.setAddress(address);
+            toBeUpdated.setCity(city);
+            toBeUpdated.setState(state);
+
+            userDAO.updateUserInDB(toBeUpdated);
+            System.out.println("from post editprofile" + toBeUpdated);
+            response.redirect("/editprofile");
+            return null;
+        });
     }
 }

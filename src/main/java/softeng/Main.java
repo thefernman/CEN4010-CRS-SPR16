@@ -77,11 +77,15 @@ public class Main {
         post("/registration", (request, response) -> {
             System.out.println("Get a post from registration");
             String email = request.queryParams("email");
-            User newUser = new User(email, request.queryParams("password"));
-            System.out.println("Values received: " + email + ", " +  request.queryParams("password"));
+            String password = request.queryParams("password");
+            User newUser = new User(email, password);
+
+            System.out.println("Values received: " + newUser.getEmail() + ", " +  newUser.getPassword());
+
             userDAO.add(newUser);
             request.session().attribute("email", email);
             response.redirect("/");
+            userDAO.findAll().forEach(user -> System.out.println(user.getEmail()));
             return null;
         });
 
@@ -94,7 +98,6 @@ public class Main {
 
             String email = request.queryParams("email");
             String password = request.queryParams("password");
-
             //fetch all user attributes from db and use them to populate the session object.user attributes
             model.put("email", email);
 

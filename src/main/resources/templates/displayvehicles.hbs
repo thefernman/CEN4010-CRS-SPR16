@@ -1,9 +1,13 @@
 {{#partial "content"}}
     <h1>Display Vehicles</h1>
-    <div>
-        {{ vehicle.model }}, {{ vehicle.manufacturer }}
-    </div>
-     You have rented this car.
+    {{#each vehicle}}
+        <div>
+            <form name="selctionform" action="/checkout" method="post">
+                {{ model }} {{ type }}
+                <button type="submit" class="btn btn-success" name="selection" value={{ id }}>select</button>
+            </form>
+        </div>
+    {{/each}}
 {{/partial}}
 
 {{>index.hbs}}

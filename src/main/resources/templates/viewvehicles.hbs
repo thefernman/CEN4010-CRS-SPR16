@@ -1,11 +1,20 @@
 {{#partial "content"}}
     <h1>View Cars</h1>
-
-    <ul>
-        {{#each vehicles}}
-            <li>{{ model }} , {{ manufacturer }}</li>
-        {{/each}}
-    </ul>
+    <div>
+        <form name="myform" action="/displayvehicles" method="POST">
+                <select input type="text" name="mydropdown1">
+                    {{#each vehicles}}
+                        <option value ={{ model }}>{{ model }}</option>
+                    {{/each}}
+                </select>
+                <select input type="text" name="mydropdown2">
+                    {{#each vehicles}}
+                        <option value ={{ manufacturer }}>{{ manufacturer }}</option>
+                    {{/each}}
+                </select>
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+    </div>
 {{/partial}}
 
 {{>index.hbs}}

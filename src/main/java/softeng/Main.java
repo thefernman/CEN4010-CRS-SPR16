@@ -1,6 +1,7 @@
 package softeng;
 
 import com.google.gson.Gson;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.sql2o.Sql2o;
 import softeng.dao.reservations.ReservationDAO;
 import softeng.dao.reservations.Sql2oReservationDAO;
@@ -118,6 +119,15 @@ public class Main {
             return new ModelAndView(model, "viewvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
+        post("/displayvehicles", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            Vehicle selectedVehicle = new Vehicle("car", 1990, request.queryParams("mydropdown2"), request.queryParams("mydropdown1"));
+            String carModel = request.queryParams("mydropdown1");
+            String manufacturer = request.queryParams("mydropdown2");
+            System.out.println(carModel + "," + manufacturer);
+            model.put("vehicle", selectedVehicle);
+            return new ModelAndView(model, "displayvehicles.hbs");
+        }, new HandlebarsTemplateEngine());
         /*
         View Specials
          */

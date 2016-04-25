@@ -35,33 +35,29 @@
                 <a class="navbar-brand" href="/">Car Rental System</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-                {{#if user_is_member}} <!-- is session.user is not null -->
-                <div class="navbar-form navbar-right-member">
-                    <div class="form-group">
+                {{#if user}} <!-- is session.user is not null -->
+
+                <div class="navbar-form navbar-right-user">
+                    <!--div class="form-group">
                         <input type="search" placeholder="Search vehicles" class="form-control">
-                    </div>
-                    <a class="btn btn-default" href="/viewvehicles" role="button">Browse vehicles</a>
+                    </div-->
+                    <a class="btn btn-default" href="/vehicles" role="button">Browse vehicles</a>
+                    <a class="btn btn-success" href="/sign-out" role="button">Sign out</a>
                 </div>
+
                 {{else}}
-                    {{#if user_is_admin}} <!-- is session.user is not null -->
-                    <div class="navbar-form navbar-right-admin">
-                        <div class="form-group">
-                            <input type="search" placeholder="Search vehicles" class="form-control">
-                        </div>
-                        <a class="btn btn-default" href="/vehicles" role="button">Browse vehicles</a>
+
+                <form action="/sign-in" method="post" class="navbar-form navbar-right-guest">
+                    <div class="form-group">
+                        <input name="email" type="text" placeholder="Email" class="form-control">
                     </div>
-                    {{else}} <!-- is session.user is null -->
-                    <form action="/sign-in" method="post" class="navbar-form navbar-right-guest">
-                        <div class="form-group">
-                            <input name="email" type="text" placeholder="Email" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <input name="password" type="password" placeholder="Password" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-success">Sign in</button>
-                        <a class="btn btn-default" href="/registration" role="button">Registration</a>
-                    </form>
-                    {{/if}}
+                    <div class="form-group">
+                        <input name="password" type="password" placeholder="Password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Sign in</button>
+                    <a class="btn btn-default" href="/registration" role="button">Registration</a>
+                </form>
+
                 {{/if}}
             </div><!--/.navbar-collapse -->
         </div>

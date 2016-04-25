@@ -18,11 +18,6 @@ public class User {
         this.email = email;
         this.password = password;
     }
-    public User(String email, String password, String type) {
-        this.email = email;
-        this.password = password;
-        this.type = type;
-    }
     public int getId() {
         return id;
     }
@@ -31,8 +26,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
                 ", type='" + type + '\'' +
                 ", id='" + id + '\'' +
                 ", password='" + password + '\'' +

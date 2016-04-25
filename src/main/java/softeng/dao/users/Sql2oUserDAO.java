@@ -65,18 +65,33 @@ public class Sql2oUserDAO implements UserDAO {
                     .executeAndFetchFirst(User.class);
         }
     }
+
+    @Override
+    public void updateUserInDB(User user) {
+        String sql = "UPDATE users " +
+                "SET firstName = :firstName, lastName = :lastName, address = :address, city = :city, state = :state " +
+                "WHERE email = :email";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .bind(user)
+                    .executeUpdate();
+        }
+    }
+
     //TODO: Fix this shit
     public boolean verifyUserLogin(String email, String password) throws DAOException {
-
+        System.out.println("verifying login for user with email: "+email+" and password: "+password);
         try (Connection con = sql2o.open()) {
             User userLoggingIn = con.createQuery("SELECT * FROM users WHERE email = :email AND password = :password")
                     .addParameter("email", email)
                     .addParameter("password", password)
                     .executeAndFetchFirst(User.class);
 
-            return userLoggingIn.getEmail().equals(email) &&
-                        userLoggingIn.getPassword().equals(password);
-        }catch(Sql2oException ex){
+            if(userLoggingIn == null) return false;
+
+            else return userLoggingIn.getEmail().equals(email) && userLoggingIn.getPassword().equals(password);
+
+        } catch(Sql2oException ex) {
             throw new DAOException(ex, "problem logging in with username " + email + " and password " + password);
         }
     }

@@ -33,4 +33,7 @@ public class ReservationController {
         }
     }
 
+    public List<Reservation> getAllReservations(){
+       return reservDAO.findAll();
+    }
 }

@@ -68,6 +68,6 @@ public class Vehicle {
     }
 
     public String getInfo(){
-        return "Vehicle Info: " +id +", " + type + ", "+ year + ", "+ manufacturer + ", "+ model;
+        return "Vehicle Info: " +id +", " + type + ", "+ year + ", "+ manufacturer + ", "+ model +", isReserved=" + reserved;
     }
 }

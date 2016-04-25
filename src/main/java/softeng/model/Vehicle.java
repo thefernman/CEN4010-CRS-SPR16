@@ -31,6 +31,23 @@ public class Vehicle {
         return type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Vehicle vehicle = (Vehicle) o;
+
+        if (id != vehicle.id) return false;
+        if (year != vehicle.year) return false;
+        if (reserved != vehicle.reserved) return false;
+        if (type != null ? !type.equals(vehicle.type) : vehicle.type != null) return false;
+        if (manufacturer != null ? !manufacturer.equals(vehicle.manufacturer) : vehicle.manufacturer != null)
+            return false;
+        return model != null ? model.equals(vehicle.model) : vehicle.model == null;
+
+    }
+
     public void setType(String type) {
         this.type = type;
     }

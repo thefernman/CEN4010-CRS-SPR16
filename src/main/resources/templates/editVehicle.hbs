@@ -1,0 +1,47 @@
+{{#partial "content"}}
+    <div class="container">
+        <h1>Edit Vehicle</h1>
+        <hr>
+        <div class="row">
+            <!-- edit form column -->
+            <div class="col-md-9 personal-info">
+                <h3>Vehicle info</h3>
+                <form action="/editvehicle" method="post" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Type:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="firstName" required value="{{ vehicle.type }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Year:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="lastName" required value="{{ vehicle.year }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Manufacturer:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="email" value="{{ vehicle.manufacturer }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Model:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="address" required value="{{ vehicle.model }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label"></label>
+                        <div class="col-md-8">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+{{/partial}}
+
+{{> index.hbs}}

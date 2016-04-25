@@ -9,6 +9,7 @@ import softeng.dao.vehicles.Sql2oVehicleDAO;
 import softeng.model.Vehicle;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by Fernando on 4/23/2016.
@@ -36,6 +37,23 @@ public class Sql2oVehicleDAOTest {
         Vehicle vehicle = newTestVehicle();
         vehicleDAO.add(vehicle);
         assertEquals(1, vehicleDAO.findAll().size());
+    }
+
+    @Test
+    public void updateVehicleInDB() throws Exception {
+        Vehicle vehicle = newTestVehicle();
+
+        vehicleDAO.add(vehicle);
+        vehicle.setManufacturer("Toyota");
+        vehicle.setModel("Echo");
+        vehicle.setYear(2010);
+        vehicle.setType("SUV");
+        vehicle.setReserved(true);
+        vehicleDAO.updateVehicleInDB(vehicle);
+
+        Vehicle vehicle1 = vehicleDAO.findById(vehicle.getId());
+
+        assertEquals(vehicle, vehicle1);
     }
 
     private Vehicle newTestVehicle() {

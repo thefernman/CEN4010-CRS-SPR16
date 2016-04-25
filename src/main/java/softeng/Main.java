@@ -158,6 +158,16 @@ public class Main {
             return null;
         });
 
+        get("/editvehicle", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            int vehicle_id = Integer.parseInt(request.queryParams("vehicle_id"));
+
+            Vehicle toBeEdited = vehCont.getVehicleById(vehicle_id);
+            System.out.println("from get editvehicle: " + toBeEdited);
+            model.put("vehicle", toBeEdited);
+            return new ModelAndView(model, "editVehicle.hbs");
+        }, new HandlebarsTemplateEngine());
+
         //add dummy vehicles to database
         //vehCont.populateDBWithDummyCars();
     }

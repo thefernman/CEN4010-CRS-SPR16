@@ -15,6 +15,7 @@ import softeng.dao.users.Sql2oUserDAO;
 import softeng.dao.users.UserDAO;
 import softeng.dao.vehicles.Sql2oVehicleDAO;
 import softeng.dao.vehicles.VehicleDAO;
+import softeng.model.Reservation;
 import softeng.model.Special;
 import softeng.model.User;
 import softeng.model.Vehicle;
@@ -38,18 +39,18 @@ public class Main {
 
         //TODO: Figure out mysql driver stuff.. eventually remove these DAOs and replace them with controllers
 
-        String datasource = "jdbc:h2:~/CarRental.db";
-        Sql2o sql2o = new Sql2o(
-                String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
-
-        VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
-        ReservationDAO reservationDAO = new Sql2oReservationDAO(sql2o);
-        //UserDAO userDAO = new Sql2oUserDAO(sql2o);
-        //VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
+        //SpecialController specCont = new VehicleController();
         VehicleController vehCont = new VehicleController();
         ReservationController resvCont = new ReservationController();
-        SpecialDAO specialDAO = new Sql2oSpecialDAO(sql2o);
+        UserSessionController sessCont = new UserSessionController();
+
         UserSessionController sessionController = new UserSessionController();
+
+        List<Reservation> list = resvCont.findAllReservations();
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i).toString());
+        }
+
 
         //In case we use json objects..
         Gson gson = new Gson();
@@ -58,21 +59,21 @@ public class Main {
             Home Page Route
          */
         get("/", (request, response) -> {
-            return new ModelAndView(sessionController.getSessionModel(request), "index.hbs"); //returned model map may have zero entries
+            return new ModelAndView(sessCont.getSessionModel(request), "index.hbs"); //returned model map may have zero entries
         }, new HandlebarsTemplateEngine());
 
         /*
             Registration Route
          */
         get("/registration", (request, response) -> {
-            return new ModelAndView(sessionController.getSessionModel(request), "registration.hbs"); //returned model map may have zero entries
+            return new ModelAndView(sessCont.getSessionModel(request), "registration.hbs"); //returned model map may have zero entries
         }, new HandlebarsTemplateEngine());
 
         post("/registration", (request, response) -> {
             //System.out.println("page: /registration\nurl: "+request.url()+"\nsession_is_new: "+request.session().isNew());
             Map<String, Object> model = null;
-            if(sessionController.registerUser(request,request.queryParams("email"), request.queryParams("password"))){
-                model = sessionController.getSessionModel(request);
+            if(sessCont.registerUser(request,request.queryParams("email"), request.queryParams("password"))){
+                model = sessCont.getSessionModel(request);
                 model.put("registration_is_new",true); //if new registration, display welcome on /registration
             }
             return new ModelAndView(model, "registration.hbs");
@@ -85,8 +86,8 @@ public class Main {
         post("/sign-in", (request, response) -> {
             //System.out.println("page: /sign-in\nSession: "+request.session());
             Map<String, Object> model = null;
-            if(sessionController.loginUser(request,request.queryParams("email"),request.queryParams("password"))) {
-                model = sessionController.getSessionModel(request);
+            if(sessCont.loginUser(request,request.queryParams("email"),request.queryParams("password"))) {
+                model = sessCont.getSessionModel(request);
             }
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
@@ -96,55 +97,64 @@ public class Main {
                 System.out.println("removing attr: " + request.session().attribute(attr));
                 request.session().removeAttribute(attr);
             }
-            return new ModelAndView(sessionController.getSessionModel(request), "index.hbs");
+            return new ModelAndView(sessCont.getSessionModel(request), "index.hbs");
         }, new HandlebarsTemplateEngine());
         /*
         View Vehicles
          */
         get("/viewvehicles", (request, response) -> {
-            Map<String, Object> model = sessionController.getSessionModel(request);
+            Map<String, Object> model = sessCont.getSessionModel(request);
             model.put("vehicles", vehCont.getAllVehicles());
             return new ModelAndView(model, "viewvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/displayvehicles", (request, response) -> {
-            Map<String, Object> model = sessionController.getSessionModel(request);
+            Map<String, Object> model = sessCont.getSessionModel(request);
             String type = request.queryParams("selection");
-            List<Vehicle> typeSelection = vehCont.getVehicleByType(type);
+            List<Vehicle> typeSelection = vehCont.getUnreservedVehicleByType(type);
             model.put("vehicle", typeSelection);
             return new ModelAndView(model, "displayvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/checkout", (request, response) -> {
-            Map<String, Object> model = sessionController.getSessionModel(request);
+            Map<String, Object> model = sessCont.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("selection"));
+            vehCont.markAsReserved(vehCont.getVehicleById(id));
             model.put("vehicle", vehCont.getVehicleById(id));
             return new ModelAndView(model, "checkout.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/confirmation", (request, response) -> {
-            Map<String, Object> model = sessionController.getSessionModel(request);
+            Map<String, Object> model = sessCont.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("confirmation"));
-            User curruser = (User) model.get("user");
-            model.put("vehicle", vehCont.getVehicleById(id));
-            resvCont.reserveVehicle(id, curruser.getId());
-            return new ModelAndView(model, "confirmation.hbs");
+            System.out.println(model.toString());
+
+            if (model.get("user") == null) {
+                System.out.println("User is not Logged in");
+            }else{
+                User curruser = (User)model.get("user");
+                System.out.println(curruser.getId());
+                model.put("vehicle", vehCont.getVehicleById(id));
+                resvCont.reserveVehicle(id, curruser.getId());
+                return new ModelAndView(model, "confirmation.hbs");
+            }
+            return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
         /*
         View Specials
          */
-        get("/specials", (request, response) -> {
-            Map<String, Object> model = sessionController.getSessionModel(request);
-            model.put("specials", specialDAO.findAll());
-            return new ModelAndView(model, "specials.hbs");
-        }, new HandlebarsTemplateEngine());
+//        get("/specials", (request, response) -> {
+//            Map<String, Object> model = sessCont.getSessionModel(request);
+//            model.put("specials", specCont.findAll());
+//            return new ModelAndView(model, "specials.hbs");
+//        }, new HandlebarsTemplateEngine());
 
         get("/editprofile", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
+            Map<String, Object> model = sessCont.getSessionModel(request);
             String user_email = request.session().attribute("user_email");
 
-            User toBeEdited = sessionController.findByEmail(user_email);
+            User toBeEdited = request.session().attribute("user_email");
             System.out.println("from get editprofile: " + toBeEdited);
             model.put("user", toBeEdited);
             return new ModelAndView(model, "editProfile.hbs");
@@ -158,7 +168,7 @@ public class Main {
             String city = request.queryParams("city");
             String state = request.queryParams("state");
 
-            User toBeUpdated = sessionController.findByEmail(email);
+            User toBeUpdated = sessCont.findByEmail(email);
 
             toBeUpdated.setFirstName(firstName);
             toBeUpdated.setLastName(lastName);
@@ -166,7 +176,7 @@ public class Main {
             toBeUpdated.setCity(city);
             toBeUpdated.setState(state);
 
-//            sessionController.updateUserInDB(toBeUpdated);
+//            sessCont.updateUserInDB(toBeUpdated);
             System.out.println("from post editprofile" + toBeUpdated);
             response.redirect("/editprofile");
             return null;
@@ -181,5 +191,8 @@ public class Main {
             model.put("vehicle", toBeEdited);
             return new ModelAndView(model, "editVehicle.hbs");
         }, new HandlebarsTemplateEngine());
+
+        //add dummy vehicles to database
+        vehCont.populateDBWithDummyCars();
     }
 }

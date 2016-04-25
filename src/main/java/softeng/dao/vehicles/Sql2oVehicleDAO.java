@@ -63,4 +63,16 @@ public class Sql2oVehicleDAO implements VehicleDAO {
                     .executeAndFetchFirst(Vehicle.class);
         }
     }
+    @Override
+    public void updateVehicleInDB(Vehicle vehicle) {
+        String sql = "UPDATE vehicles " +
+                "SET type = :type, year = :year, manufacturer = :manufacturer, model = :model, reserved = :reserved " +
+                "WHERE id = :id";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .bind(vehicle)
+                    .executeUpdate();
+        }
+    }
+
 }

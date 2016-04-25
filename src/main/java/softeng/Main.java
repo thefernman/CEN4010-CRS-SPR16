@@ -146,7 +146,7 @@ public class Main {
             Map<String, Object> model = new HashMap<>();
             String user_email = request.session().attribute("user_email");
 
-            User toBeEdited = userDAO.findByEmail(user_email);
+            User toBeEdited = sessionController.findByEmail(user_email);
             System.out.println("from get editprofile: " + toBeEdited);
             model.put("user", toBeEdited);
             return new ModelAndView(model, "editProfile.hbs");
@@ -160,7 +160,7 @@ public class Main {
             String city = request.queryParams("city");
             String state = request.queryParams("state");
 
-            User toBeUpdated = userDAO.findByEmail(email);
+            User toBeUpdated = sessionController.findByEmail(email);
 
             toBeUpdated.setFirstName(firstName);
             toBeUpdated.setLastName(lastName);
@@ -168,7 +168,7 @@ public class Main {
             toBeUpdated.setCity(city);
             toBeUpdated.setState(state);
 
-            userDAO.updateUserInDB(toBeUpdated);
+//            sessionController.updateUserInDB(toBeUpdated);
             System.out.println("from post editprofile" + toBeUpdated);
             response.redirect("/editprofile");
             return null;

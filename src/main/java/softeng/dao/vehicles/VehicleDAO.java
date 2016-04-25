@@ -17,4 +17,6 @@ public interface VehicleDAO {
     List<Vehicle> findAllByType(String type);
 
     Vehicle findById(int id);
+
+    void updateVehicleInDB(Vehicle vehicle);
 }

@@ -47,4 +47,8 @@ public class Reservation {
     public void setDates(String dates) {
         this.dates = dates;
     }
+
+    public String toString(){
+        return "Id: " + id + ", vehicle_id:" + vehicle_id + ", user_id: " + user_id + ", dates: " + dates;
+    }
 }

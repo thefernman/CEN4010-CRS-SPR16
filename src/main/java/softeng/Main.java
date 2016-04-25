@@ -15,6 +15,7 @@ import softeng.dao.users.Sql2oUserDAO;
 import softeng.dao.users.UserDAO;
 import softeng.dao.vehicles.Sql2oVehicleDAO;
 import softeng.dao.vehicles.VehicleDAO;
+import softeng.model.Reservation;
 import softeng.model.Special;
 import softeng.model.User;
 import softeng.model.Vehicle;
@@ -38,19 +39,16 @@ public class Main {
 
         //TODO: Figure out mysql driver stuff.. eventually remove these DAOs and replace them with controllers
 
-        String datasource = "jdbc:h2:~/CarRental.db";
-        Sql2o sql2o = new Sql2o(
-                String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
-
-        VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
-        ReservationDAO reservationDAO = new Sql2oReservationDAO(sql2o);
-        //UserDAO userDAO = new Sql2oUserDAO(sql2o);
-        //VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
         VehicleController vehCont = new VehicleController();
         ReservationController resvCont = new ReservationController();
-        SpecialDAO specialDAO = new Sql2oSpecialDAO(sql2o);
         UserSessionController sessionController = new UserSessionController();
 
+        List<Reservation> list = resvCont.findAllReservations();
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i).toString());
+        }
+        
+        
         //In case we use json objects..
         Gson gson = new Gson();
 
@@ -110,7 +108,7 @@ public class Main {
         post("/displayvehicles", (request, response) -> {
             Map<String, Object> model = sessionController.getSessionModel(request);
             String type = request.queryParams("selection");
-            List<Vehicle> typeSelection = vehCont.getVehicleByType(type);
+            List<Vehicle> typeSelection = vehCont.getUnreservedVehicleByType(type);
             model.put("vehicle", typeSelection);
             return new ModelAndView(model, "displayvehicles.hbs");
         }, new HandlebarsTemplateEngine());
@@ -118,6 +116,7 @@ public class Main {
         post("/checkout", (request, response) -> {
             Map<String, Object> model = sessionController.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("selection"));
+            vehCont.markAsReserved(vehCont.getVehicleById(id));
             model.put("vehicle", vehCont.getVehicleById(id));
             return new ModelAndView(model, "checkout.hbs");
         }, new HandlebarsTemplateEngine());
@@ -125,20 +124,28 @@ public class Main {
         post("/confirmation", (request, response) -> {
             Map<String, Object> model = sessionController.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("confirmation"));
-            User curruser = (User) model.get("user");
-            model.put("vehicle", vehCont.getVehicleById(id));
-            resvCont.reserveVehicle(id, curruser.getId());
-            return new ModelAndView(model, "confirmation.hbs");
+            System.out.println(model.toString());
+
+            if (model.get("user") == null) {
+                System.out.println("User is not Logged in");
+            }else{
+                User curruser = (User)model.get("user");
+                System.out.println(curruser.getId());
+                model.put("vehicle", vehCont.getVehicleById(id));
+                resvCont.reserveVehicle(id, curruser.getId());
+                return new ModelAndView(model, "confirmation.hbs");
+            }
+            return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
         /*
         View Specials
          */
-        get("/specials", (request, response) -> {
-            Map<String, Object> model = sessionController.getSessionModel(request);
-            model.put("specials", specialDAO.findAll());
-            return new ModelAndView(model, "specials.hbs");
-        }, new HandlebarsTemplateEngine());
+//        get("/specials", (request, response) -> {
+//            Map<String, Object> model = sessionController.getSessionModel(request);
+//            model.put("specials", specialDAO.findAll());
+//            return new ModelAndView(model, "specials.hbs");
+//        }, new HandlebarsTemplateEngine());
 
         get("/editprofile", (request, response) -> {
             Map<String, Object> model = new HashMap<>();

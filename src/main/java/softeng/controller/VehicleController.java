@@ -24,11 +24,29 @@ public class VehicleController {
         return vehDAO.findAllByType(type);
     }
 
+    public List<Vehicle> getUnreservedVehicleByType(String type){
+        List<Vehicle> all = vehDAO.findAllByType(type);
+
+        for (int i = 0; i < all.size(); i++) {
+            System.out.println(all.get(i).getInfo());
+        }
+
+        for (int i = 0; i < all.size(); i++) {
+            if (all.get(i).isReserved()){
+                System.out.println(all.get(i).getInfo() + " was removed from available list");
+                all.remove(i);
+                i--;
+            }
+        }
+        return all;
+    }
+
     public Vehicle getVehicleById(int id){
         return vehDAO.findById(id);
     }
 
     public void markAsReserved(Vehicle veh){
-
+        veh.setReserved(true);
+        vehDAO.updateVehicleInDB(veh);
     }
 }

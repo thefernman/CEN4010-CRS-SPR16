@@ -34,12 +34,12 @@ public class Main {
         //TODO: Maybe change the name to Route.java??
         staticFileLocation("/public");
 
-        //TODO: Figure out mysql driver stuff..
+        //TODO: Figure out mysql driver stuff.. eventually remove these DAOs and replace them with controllers
+
         String datasource = "jdbc:h2:~/CarRental.db";
         Sql2o sql2o = new Sql2o(
                 String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
 
-        //UserDAO userDAO = new Sql2oUserDAO(sql2o);
         VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
         ReservationDAO reservationDAO = new Sql2oReservationDAO(sql2o);
         SpecialDAO specialDAO = new Sql2oSpecialDAO(sql2o);
@@ -64,48 +64,26 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         post("/registration", (request, response) -> {
-            System.out.println("page: /registration\nurl: "+request.url()+"\nsession_is_new: "+request.session().isNew());
-
-            User user = sessionController.createUser(request.queryParams("email"), request.queryParams("password"),"member");
-            sessionController.setSessionAttributes(request,user);
-            Map<String, Object> model = sessionController.getSessionModel(request);
-
-            model.put("registration_is_new",true); //if new registration, display welcome on /registration
-
+            //System.out.println("page: /registration\nurl: "+request.url()+"\nsession_is_new: "+request.session().isNew());
+            Map<String, Object> model = null;
+            if(sessionController.registerUser(request,request.queryParams("email"), request.queryParams("password"))){
+                model = sessionController.getSessionModel(request);
+                model.put("registration_is_new",true); //if new registration, display welcome on /registration
+            }
             return new ModelAndView(model, "registration.hbs");
         }, new HandlebarsTemplateEngine());
 
         /*
-        Login
+            Sign-in
          */
         //TODO: when a user logs in, return them to the page they were originally on with the state preserved instead of index.hbs
         post("/sign-in", (request, response) -> {
-            System.out.println("page: /sign-in\nSession: "+request.session());
-
-            String email = request.queryParams("email");
-            String password = request.queryParams("password");
-
-            if(sessionController.loginCredentialsAreValid(email,password))
-            {
-                User user = sessionController.findByEmail(email);
-                sessionController.setSessionAttributes(request,user);
-                //model = sessionController.getSessionModel(request);
-
-                System.out.print("Login attempted by user: ");
-                System.out.println(user);
-
-                System.out.println("with attributes: \n");
-                for (String attr : request.session().attributes()){
-                    System.out.println(attr+"="+request.session().attribute(attr));
-                }
-                System.out.println("and db users: \n");
-                for (Object obj : sessionController.findAll()){
-                    System.out.println(obj);
-                }
-                System.out.println("valid: yes");
+            //System.out.println("page: /sign-in\nSession: "+request.session());
+            Map<String, Object> model = null;
+            if(sessionController.loginUser(request,request.queryParams("email"),request.queryParams("password"))) {
+                model = sessionController.getSessionModel(request);
             }
-//            System.out.println("valid: no");
-            return new ModelAndView(sessionController.getSessionModel(request), "index.hbs");
+            return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/sign-out", (request, response) -> {

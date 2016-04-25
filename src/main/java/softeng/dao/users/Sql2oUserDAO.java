@@ -74,9 +74,11 @@ public class Sql2oUserDAO implements UserDAO {
                     .addParameter("password", password)
                     .executeAndFetchFirst(User.class);
 
-            return userLoggingIn.getEmail().equals(email) &&
-                        userLoggingIn.getPassword().equals(password);
-        }catch(Sql2oException ex){
+            if(userLoggingIn == null) return false;
+
+            else return userLoggingIn.getEmail().equals(email) && userLoggingIn.getPassword().equals(password);
+
+        } catch(Sql2oException ex) {
             throw new DAOException(ex, "problem logging in with username " + email + " and password " + password);
         }
     }

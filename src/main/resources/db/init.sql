@@ -1,7 +1,7 @@
-//DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
    id int PRIMARY KEY auto_increment,
-   type VARCHAR,
+   type VARCHAR DEFAULT 'member',
    email VARCHAR UNIQUE,
    firstName VARCHAR,
    lastName VARCHAR,

@@ -176,7 +176,7 @@ public class Main {
             toBeUpdated.setCity(city);
             toBeUpdated.setState(state);
 
-//            sessCont.updateUserInDB(toBeUpdated);
+            sessCont.updateUserInDB(toBeUpdated);
             System.out.println("from post editprofile" + toBeUpdated);
             response.redirect("/editprofile");
             return null;

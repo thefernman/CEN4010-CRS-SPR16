@@ -31,7 +31,7 @@ public class Main {
         ReservationController reservationController = new ReservationController();
         UserSessionController userSessionController = new UserSessionController();
 
-        List<Reservation> list = resvCont.findAllReservations();
+        List<Reservation> list = reservationController.findAllReservations();
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i).toString());
         }
@@ -78,13 +78,23 @@ public class Main {
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
+//        get("/sign-out", (request, response) -> {
+//            for (String attr : request.session().attributes()){
+//                System.out.println("removing attr: " + request.session().attribute(attr));
+//                request.session().removeAttribute(attr);
+//            }
+//            return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
+//        }, new HandlebarsTemplateEngine());
+
         get("/sign-out", (request, response) -> {
             for (String attr : request.session().attributes()){
                 System.out.println("removing attr: " + request.session().attribute(attr));
                 request.session().removeAttribute(attr);
             }
-            return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
-        }, new HandlebarsTemplateEngine());
+            response.redirect("/");
+            return null;
+        });
+
         /*
         View Vehicles
          */
@@ -137,11 +147,11 @@ public class Main {
 //        }, new HandlebarsTemplateEngine());
 
         get("/editprofile", (request, response) -> {
-            return new ModelAndView(sessCont.getSessionModel(request), "editProfile.hbs");
+            return new ModelAndView(userSessionController.getSessionModel(request), "editProfile.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/editprofile", (request, response) -> {
-            sessCont.updateUserProfile(request);
+            userSessionController.updateUserProfile(request);
             response.redirect("/editprofile");
             return null;
         });

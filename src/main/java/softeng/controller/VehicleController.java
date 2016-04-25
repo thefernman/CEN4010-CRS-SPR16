@@ -49,4 +49,41 @@ public class VehicleController {
         veh.setReserved(true);
         vehDAO.updateVehicleInDB(veh);
     }
+
+    public void populateDBWithDummyCars(){
+        for (int i = 0; i < 5; i++) {
+            Vehicle newVeh = new Vehicle("midsize", 200 + i, "manufacturer" + i , "model"+i);
+            try{
+                vehDAO.add(newVeh);
+                System.out.println(newVeh.getModel() + " added to database");
+            }catch(Exception e){
+                System.out.println("Error from adding vehicle");
+            }
+        }
+
+        for (int i = 0; i < 5; i++) {
+            Vehicle newVeh = new Vehicle("compact", 200 + i, "manufacturer" + i , "model"+i);
+            try{
+                vehDAO.add(newVeh);
+                System.out.println(newVeh.getModel() + " added to database");
+            }catch(Exception e){
+                System.out.println("Error from adding vehicle");
+            }
+        }
+
+        for (int i = 0; i < 5; i++) {
+            Vehicle newVeh = new Vehicle("suv", 200 + i, "manufacturer" + i , "model"+i);
+            try{
+                vehDAO.add(newVeh);
+                System.out.println(newVeh.getModel() + " added to database");
+            }catch(Exception e){
+                System.out.println("Error from adding vehicle");
+            }
+        }
+
+        List<Vehicle> veh = vehDAO.findAll();
+        for(int i=0; i < veh.size(); i++){
+            System.out.println(veh.get(i).getId());
+        }
+    }
 }

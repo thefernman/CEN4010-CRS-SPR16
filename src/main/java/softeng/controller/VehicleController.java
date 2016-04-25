@@ -3,6 +3,7 @@ package softeng.controller;
 import org.sql2o.Sql2o;
 import softeng.dao.vehicles.Sql2oVehicleDAO;
 import softeng.dao.vehicles.VehicleDAO;
+import softeng.exc.DAOException;
 import softeng.model.Vehicle;
 
 import java.util.List;
@@ -15,6 +16,14 @@ public class VehicleController {
     String datasource = "jdbc:h2:~/CarRental.db";
     Sql2o sql2o = new Sql2o(String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
     private VehicleDAO vehDAO= new Sql2oVehicleDAO(sql2o);
+
+    public void addVehicle(Vehicle vehicle) {
+        try {
+            vehDAO.add(vehicle);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public List<Vehicle> getAllVehicles(){
        return vehDAO.findAll();

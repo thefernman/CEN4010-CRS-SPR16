@@ -31,7 +31,7 @@ public class Main {
         ReservationController reservationController = new ReservationController();
         UserSessionController userSessionController = new UserSessionController();
 
-        List<Reservation> list = reservationController.findAllReservations();
+        List<Reservation> list = resvCont.findAllReservations();
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i).toString());
         }
@@ -137,12 +137,11 @@ public class Main {
 //        }, new HandlebarsTemplateEngine());
 
         get("/editprofile", (request, response) -> {
-            return new ModelAndView(userSessionController.getSessionModel(request), "editProfile.hbs");
+            return new ModelAndView(sessCont.getSessionModel(request), "editProfile.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/editprofile", (request, response) -> {
-
-            userSessionController.updateUserProfile(request);
+            sessCont.updateUserProfile(request);
             response.redirect("/editprofile");
             return null;
         });
@@ -158,6 +157,6 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         //add dummy vehicles to database
-        vehicleController.populateDBWithDummyCars();
+        //vehCont.populateDBWithDummyCars();
     }
 }

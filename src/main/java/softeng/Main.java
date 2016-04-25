@@ -44,8 +44,6 @@ public class Main {
         ReservationController resvCont = new ReservationController();
         UserSessionController sessCont = new UserSessionController();
 
-        UserSessionController sessionController = new UserSessionController();
-
         List<Reservation> list = resvCont.findAllReservations();
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i).toString());
@@ -151,38 +149,16 @@ public class Main {
 //        }, new HandlebarsTemplateEngine());
 
         get("/editprofile", (request, response) -> {
-            Map<String, Object> model = sessCont.getSessionModel(request);
-            String user_email = request.session().attribute("user_email");
-
-            User toBeEdited = request.session().attribute("user_email");
-            System.out.println("from get editprofile: " + toBeEdited);
-            model.put("user", toBeEdited);
-            return new ModelAndView(model, "editProfile.hbs");
+            return new ModelAndView(sessCont.getSessionModel(request), "editProfile.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/editprofile", (request, response) -> {
-            String firstName = request.queryParams("firstName");
-            String lastName = request.queryParams("lastName");
-            String email = request.queryParams("email");
-            String address = request.queryParams("address");
-            String city = request.queryParams("city");
-            String state = request.queryParams("state");
-
-            User toBeUpdated = sessCont.findByEmail(email);
-
-            toBeUpdated.setFirstName(firstName);
-            toBeUpdated.setLastName(lastName);
-            toBeUpdated.setAddress(address);
-            toBeUpdated.setCity(city);
-            toBeUpdated.setState(state);
-
-//            sessCont.updateUserInDB(toBeUpdated);
-            System.out.println("from post editprofile" + toBeUpdated);
+            sessCont.updateUserProfile(request);
             response.redirect("/editprofile");
             return null;
         });
 
         //add dummy vehicles to database
-        vehCont.populateDBWithDummyCars();
+        //vehCont.populateDBWithDummyCars();
     }
 }

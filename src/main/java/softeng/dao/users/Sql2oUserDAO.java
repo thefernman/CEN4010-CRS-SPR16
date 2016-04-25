@@ -58,16 +58,18 @@ public class Sql2oUserDAO implements UserDAO {
         }
     }
 
-    public User findByEmail(String email) {
+    public User findByEmail(String email) throws Sql2oException{
         try (Connection con = sql2o.open()) {
             return con.createQuery("SELECT * FROM users WHERE email = :email")
                     .addParameter("email", email)
                     .executeAndFetchFirst(User.class);
+        } catch (Sql2oException ex){
+            throw ex;
         }
     }
 
     @Override
-    public void updateUserInDB(User user) {
+    public boolean updateUserInDB(User user) {
         String sql = "UPDATE users " +
                 "SET firstName = :firstName, lastName = :lastName, address = :address, city = :city, state = :state " +
                 "WHERE email = :email";
@@ -75,6 +77,9 @@ public class Sql2oUserDAO implements UserDAO {
             con.createQuery(sql)
                     .bind(user)
                     .executeUpdate();
+            return true;
+        } catch (Sql2oException ex){
+            return false;
         }
     }
 

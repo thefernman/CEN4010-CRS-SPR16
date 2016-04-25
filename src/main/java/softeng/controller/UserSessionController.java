@@ -34,6 +34,26 @@ public class UserSessionController {
             throw ex;
         }
     }
+    public void updateUserProfile(Request request){
+        String firstName = request.queryParams("firstName");
+        String lastName = request.queryParams("lastName");
+        String address = request.queryParams("address");
+        String city = request.queryParams("city");
+        String state = request.queryParams("state");
+
+        User toBeUpdated = request.session().attribute("user");
+
+        toBeUpdated.setFirstName(firstName);
+        toBeUpdated.setLastName(lastName);
+        toBeUpdated.setAddress(address);
+        toBeUpdated.setCity(city);
+        toBeUpdated.setState(state);
+
+        userDAO.updateUserInDB(toBeUpdated);
+    }
+//    public boolean updateUserInDB(User user) {
+//        return userDAO.updateUserInDB(user);
+//    }
     public Map<String,Object> getSessionModel(Request request){
         Map<String, Object> model = new HashMap<>();
 
@@ -71,6 +91,7 @@ public class UserSessionController {
         try {
             return userDAO.findByEmail(email);
         } catch (Sql2oException ex){
+            System.out.println("findByEmail returned null");
             return null;
         }
     }

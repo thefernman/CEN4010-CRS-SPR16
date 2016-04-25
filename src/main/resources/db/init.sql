@@ -1,7 +1,7 @@
--- DROP TABLE IF EXISTS users;
+//DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
    id int PRIMARY KEY auto_increment,
-   type VARCHAR DEFAULT 'Member',
+   type VARCHAR,
    email VARCHAR UNIQUE,
    firstName VARCHAR,
    lastName VARCHAR,
@@ -38,4 +38,4 @@ CREATE TABLE IF NOT EXISTS specials (
    discount INTEGER,
 );
 
--- INSERT INTO users (email, password, type) VALUES ('fcamp001@fiu.edu', 'fernando', 'Admin');
+//INSERT INTO users (email, password, type) VALUES ('fcamp001@fiu.edu', 'fernando', 'Admin');

@@ -46,6 +46,30 @@ public class UserSessionController {
 
         return model;
     }
+
+    public void updateUserProfile(Request request) {
+//        System.out.println(request.queryParams("firstName"));
+        String firstName = request.queryParams("firstName");
+        String lastName = request.queryParams("lastName");
+        String email = request.queryParams("email");
+        String address = request.queryParams("address");
+        String city = request.queryParams("city");
+        String state = request.queryParams("state");
+
+        System.out.println("getSessionForPost: " + request.params());
+        User toBeUpdated = findByEmail(email);
+
+        toBeUpdated.setFirstName(firstName);
+        toBeUpdated.setLastName(lastName);
+        toBeUpdated.setAddress(address);
+        toBeUpdated.setCity(city);
+        toBeUpdated.setState(state);
+
+        updateUserInDB(toBeUpdated);
+
+        System.out.println("from post editprofile" + toBeUpdated);
+    }
+
     public boolean loginUser(Request request,String email, String password){
         try {
             if(userDAO.verifyUserLogin(email,password))

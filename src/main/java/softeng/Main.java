@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.sun.org.apache.xml.internal.serializer.utils.SystemIDResolver;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.sql2o.Sql2o;
+import softeng.controller.ReservationController;
 import softeng.controller.UserSessionController;
+import softeng.controller.VehicleController;
 import softeng.dao.reservations.ReservationDAO;
 import softeng.dao.reservations.Sql2oReservationDAO;
 import softeng.dao.specials.SpecialDAO;
@@ -40,10 +42,10 @@ public class Main {
                 String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
 
         //UserDAO userDAO = new Sql2oUserDAO(sql2o);
-        VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
-        ReservationDAO reservationDAO = new Sql2oReservationDAO(sql2o);
+        //VehicleDAO vehicleDAO = new Sql2oVehicleDAO(sql2o);
+        VehicleController vehCont = new VehicleController();
+        ReservationController resvCont = new ReservationController();
         SpecialDAO specialDAO = new Sql2oSpecialDAO(sql2o);
-
         UserSessionController sessionController = new UserSessionController();
 
 //        for (int i = 0; i < 6; i++) {
@@ -158,27 +160,34 @@ public class Main {
         View Vehicles
          */
         get("/viewvehicles", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
-            model.put("vehicles", vehicleDAO.findAll());
+            Map<String, Object> model = sessionController.getSessionModel(request);
+            model.put("vehicles", vehCont.getAllVehicles());
             return new ModelAndView(model, "viewvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/displayvehicles", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
+            Map<String, Object> model = sessionController.getSessionModel(request);
             String type = request.queryParams("selection");
-            List<Vehicle> typeSelection = vehicleDAO.findAllByType(type);
+            List<Vehicle> typeSelection = vehCont.getVehicleByType(type);
             model.put("vehicle", typeSelection);
             return new ModelAndView(model, "displayvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
         post("/checkout", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
+            Map<String, Object> model = sessionController.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("selection"));
-            Vehicle carSelection = vehicleDAO.findById(id);
-            model.put("vehicle", carSelection);
+            model.put("vehicle", vehCont.getVehicleById(id));
             return new ModelAndView(model, "checkout.hbs");
         }, new HandlebarsTemplateEngine());
 
+        post("/confirmation", (request, response) -> {
+            Map<String, Object> model = sessionController.getSessionModel(request);
+            int id = Integer.parseInt(request.queryParams("confirmation"));
+            User curruser = (User) model.get("user");
+            model.put("vehicle", vehCont.getVehicleById(id));
+            resvCont.reserveVehicle(id, curruser.getId());
+            return new ModelAndView(model, "confirmation.hbs");
+        }, new HandlebarsTemplateEngine());
 
         /*
         View Specials

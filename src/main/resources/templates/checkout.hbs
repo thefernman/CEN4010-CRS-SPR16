@@ -1,13 +1,19 @@
 {{#partial "content"}}
 <h1>Checkout</h1>
     <div>
+        {{ user_email }} <br>
         You have selected:<br>
-        {{ vehicle.id }}
-        {{ vehicle.type }}
-        {{ vehicle.year }}
-        {{ vehicle.manufacturer }}
-        {{ vehicle.model }}
+        id: {{ vehicle.id }}<br>
+        type: {{ vehicle.type }}<br>
+        year: {{ vehicle.year }}<br>
+        manufacturer: {{ vehicle.manufacturer }}<br>
+        model: {{ vehicle.model }}<br>
     </div>
 
+    <form name="myform" action="/confirmation" method="POST">
+        <button type="submit" class="btn btn-success" name="confirmation" value={{vehicle.id}}>Reserve car</button>
+    </form>
+
+<p><a class="btn btn-default" href="/viewvehicles" role="button">&laquo; Start over</a></p>
 {{/partial}}
 {{>index.hbs}}

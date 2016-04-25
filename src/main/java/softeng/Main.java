@@ -151,10 +151,10 @@ public class Main {
 //        }, new HandlebarsTemplateEngine());
 
         get("/editprofile", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
+            Map<String, Object> model = sessCont.getSessionModel(request);
             String user_email = request.session().attribute("user_email");
 
-            User toBeEdited = sessCont.findByEmail(user_email);
+            User toBeEdited = request.session().attribute("user_email");
             System.out.println("from get editprofile: " + toBeEdited);
             model.put("user", toBeEdited);
             return new ModelAndView(model, "editProfile.hbs");

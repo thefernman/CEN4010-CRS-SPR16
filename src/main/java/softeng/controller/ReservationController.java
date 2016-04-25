@@ -12,9 +12,11 @@ import java.util.List;
  */
 public class ReservationController {
 
-    String datasource = "jdbc:h2:~/CarRental.db";
-    Sql2o sql2o = new Sql2o(String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
-    private ReservationDAO reservDAO = new Sql2oReservationDAO(sql2o);
+    private ReservationDAO reservDAO;
+
+    public ReservationController(Sql2o sql2o) {
+        this.reservDAO = new Sql2oReservationDAO(sql2o);
+    }
 
     public List<Reservation> findAllReservations(){
         return reservDAO.findAll();

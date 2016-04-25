@@ -29,7 +29,7 @@ public class Sql2oUserDAO implements UserDAO {
                     .bind(user)
                     .executeUpdate()
                     .getKey();
-            System.out.println("adding user with id: "+id);
+//            System.out.println("adding user with id: "+id);
             user.setId(id);
         }catch(Sql2oException ex){
             throw new DAOException(ex, "problem adding user");

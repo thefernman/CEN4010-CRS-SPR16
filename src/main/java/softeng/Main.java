@@ -1,6 +1,7 @@
 package softeng;
 
 import com.google.gson.Gson;
+import org.sql2o.Sql2o;
 import softeng.controller.ReservationController;
 import softeng.controller.UserSessionController;
 import softeng.controller.VehicleController;
@@ -26,10 +27,14 @@ public class Main {
 
         //TODO: Figure out mysql driver stuff.. eventually remove these DAOs and replace them with controllers
 
-        //SpecialController specCont = new VehicleController();
-        VehicleController vehicleController = new VehicleController();
-        ReservationController reservationController = new ReservationController();
-        UserSessionController userSessionController = new UserSessionController();
+        String datasource = "jdbc:h2:~/CarRental.db";
+        Sql2o sql2o = new Sql2o(
+                String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
+
+        //SpecialController specCont = new VehicleController(sql2o);
+        VehicleController vehicleController = new VehicleController(sql2o);
+        ReservationController reservationController = new ReservationController(sql2o);
+        UserSessionController userSessionController = new UserSessionController(sql2o);
 
         List<Reservation> list = reservationController.findAllReservations();
         for (int i = 0; i < list.size(); i++) {
@@ -167,6 +172,6 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         //add dummy vehicles to database
-        //vehCont.populateDBWithDummyCars();
+        vehicleController.populateDBWithDummyCars();
     }
 }

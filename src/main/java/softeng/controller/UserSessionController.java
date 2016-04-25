@@ -81,4 +81,8 @@ public class UserSessionController {
             return null;
         }
     }
+
+    public void updateUserInDB(User toBeUpdated) {
+        userDAO.updateUserInDB(toBeUpdated);
+    }
 }

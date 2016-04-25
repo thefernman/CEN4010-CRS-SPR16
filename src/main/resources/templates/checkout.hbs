@@ -1,19 +1,26 @@
 {{#partial "content"}}
-<h1>Checkout</h1>
-    <div>
-        {{ user_email }} <br>
-        You have selected:<br>
-        id: {{ vehicle.id }}<br>
-        type: {{ vehicle.type }}<br>
-        year: {{ vehicle.year }}<br>
-        manufacturer: {{ vehicle.manufacturer }}<br>
-        model: {{ vehicle.model }}<br>
+    <div class="container">
+        <h1>Checkout</h1>
+        <div class="thumbnail">
+        <div class="caption">
+            <div>
+                <h4 class="group inner list-group-item-heading">
+                    type: {{ vehicle.type }}<br>
+                </h4>
+                <p class="group inner list-group-item-heading">
+                    manufacturer: {{ vehicle.manufacturer }}<br>
+                    model: {{ vehicle.model }}<br>
+                    model year: {{ vehicle.year }}<br>
+                    vehicle id: {{ vehicle.id }}<br>
+                </p>
+            </div>
+
+            <form name="myform" action="/confirmation" method="POST">
+                <button type="submit" class="btn btn-success" name="confirmation" value={{vehicle.id}}>Reserve car</button>
+            </form>
+        </div>
+        </div>
+        <p><a class="btn btn-default" href="/viewvehicles" role="button">&laquo; Start over</a></p>
     </div>
-
-    <form name="myform" action="/confirmation" method="POST">
-        <button type="submit" class="btn btn-success" name="confirmation" value={{vehicle.id}}>Reserve car</button>
-    </form>
-
-<p><a class="btn btn-default" href="/viewvehicles" role="button">&laquo; Start over</a></p>
 {{/partial}}
 {{>index.hbs}}

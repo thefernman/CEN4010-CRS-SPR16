@@ -1,11 +1,13 @@
 {{#partial "content"}}
+    <div class="container">
     <h1>View Cars</h1>
-    <div>
-        <form name="myform" action="/displayvehicles" method="POST">
-            <button type="submit" class="btn btn-success" name="selection" value="compact">Compact</button>
-            <button type="submit" class="btn btn-success" name="selection" value="midsize">Mid Size Sedan</button>
-            <button type="submit" class="btn btn-success" name="selection" value="suv">SUV</button>
-        </form>
+        <div>
+            <form name="myform" action="/displayvehicles" method="POST">
+                <button type="submit" class="btn btn-success" name="selection" value="compact">Compact</button>
+                <button type="submit" class="btn btn-success" name="selection" value="midsize">Mid Size Sedan</button>
+                <button type="submit" class="btn btn-success" name="selection" value="suv">SUV</button>
+            </form>
+        </div>
     </div>
 {{/partial}}
 

@@ -22,6 +22,8 @@ import static spark.Spark.staticFileLocation;
 public class Main {
     public static void main(String[] args) {
 
+        String url_prefix = "http://localhost:4567/";
+
         //TODO: Maybe change the name to Route.java??
         staticFileLocation("/public");
 
@@ -50,6 +52,7 @@ public class Main {
          */
         get("/", (request, response) -> {
             //returned model map may have zero entries
+            request.session().attribute("previous_page","index.hbs");
             return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -57,6 +60,7 @@ public class Main {
             Registration Route
          */
         get("/registration", (request, response) -> {
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
             return new ModelAndView(userSessionController.getSessionModel(request), "registration.hbs"); //returned model map may have zero entries
         }, new HandlebarsTemplateEngine());
 
@@ -67,6 +71,7 @@ public class Main {
                 model = userSessionController.getSessionModel(request);
                 model.put("registration_is_new",true); //if new registration, display welcome on /registration
             }
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
             return new ModelAndView(model, "registration.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -75,12 +80,8 @@ public class Main {
          */
         //TODO: when a user logs in, return them to the page they were originally on with the state preserved instead of index.hbs
         post("/sign-in", (request, response) -> {
-            //System.out.println("page: /sign-in\nSession: "+request.session());
-            Map<String, Object> model = null;
-            if(userSessionController.loginUser(request,request.queryParams("email"),request.queryParams("password"))) {
-                model = userSessionController.getSessionModel(request);
-            }
-            return new ModelAndView(model, "index.hbs");
+            userSessionController.loginUser(request,request.queryParams("email"),request.queryParams("password"));
+            return new ModelAndView(userSessionController.getSessionModel(request), request.session().attribute("previous_page"));
         }, new HandlebarsTemplateEngine());
 
 //        get("/sign-out", (request, response) -> {
@@ -96,9 +97,8 @@ public class Main {
                 System.out.println("removing attr: " + request.session().attribute(attr));
                 request.session().removeAttribute(attr);
             }
-            response.redirect("/");
-            return null;
-        });
+            return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
+        }, new HandlebarsTemplateEngine());
 
         /*
         View Vehicles
@@ -106,6 +106,7 @@ public class Main {
         get("/viewvehicles", (request, response) -> {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             model.put("all_vehicles", vehicleController.getAllVehicles());
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
             return new ModelAndView(model, "viewvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -114,6 +115,7 @@ public class Main {
             String type = request.queryParams("selection");
             List<Vehicle> typeSelection = vehicleController.getUnreservedVehicleByType(type);
             model.put("selected_vehicles", typeSelection);
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
             return new ModelAndView(model, "displayvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -122,6 +124,7 @@ public class Main {
             int id = Integer.parseInt(request.queryParams("selection"));
             vehicleController.markAsReserved(vehicleController.getVehicleById(id));
             model.put("vehicle", vehicleController.getVehicleById(id));
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
             return new ModelAndView(model, "viewvehicledetails.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -129,6 +132,7 @@ public class Main {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("confirmation"));
             System.out.println(model.toString());
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
 
             if (model.get("user") == null) {
                 System.out.println("User is not Logged in");
@@ -150,6 +154,7 @@ public class Main {
             int id = veh.getId();
             //int id = Integer.parseInt(request.queryParams("confirmation"));
             System.out.println("id: "+id);
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
 
             if (model.get("user") == null) {
                 System.out.println("User is not Logged in");
@@ -174,6 +179,7 @@ public class Main {
 //        }, new HandlebarsTemplateEngine());
 
         get("/editprofile", (request, response) -> {
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
             return new ModelAndView(userSessionController.getSessionModel(request), "editProfile.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -190,11 +196,12 @@ public class Main {
             Vehicle toBeEdited = vehicleController.getVehicleById(vehicle_id);
             System.out.println("from get editvehicle: " + toBeEdited);
             model.put("vehicle", toBeEdited);
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
             return new ModelAndView(model, "editVehicle.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/myreservation", (request, response) -> {
-
+            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
             return new ModelAndView(reservationController.returnUsersReservationVehicles(request), "myreservation.hbs");
         }, new HandlebarsTemplateEngine());
 

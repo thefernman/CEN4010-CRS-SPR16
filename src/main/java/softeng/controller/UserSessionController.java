@@ -18,11 +18,7 @@ public class UserSessionController {
 
     private UserDAO userDAO;
 
-    public UserSessionController() {
-        String datasource = "jdbc:h2:~/CarRental.db";
-        Sql2o sql2o = new Sql2o(
-                String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
-
+    public UserSessionController(Sql2o sql2o) {
         this.userDAO = new Sql2oUserDAO(sql2o);
     }
 

@@ -13,9 +13,11 @@ import java.util.List;
  */
 public class VehicleController {
 
-    String datasource = "jdbc:h2:~/CarRental.db";
-    Sql2o sql2o = new Sql2o(String.format("%s;INIT=RUNSCRIPT from 'classpath:db/init.sql'", datasource), "", "");
-    private VehicleDAO vehDAO= new Sql2oVehicleDAO(sql2o);
+    private VehicleDAO vehDAO;
+
+    public VehicleController(Sql2o sql2o) {
+        vehDAO = new Sql2oVehicleDAO(sql2o);
+    }
 
     public void addVehicle(Vehicle vehicle) {
         try {

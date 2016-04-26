@@ -1,0 +1,56 @@
+{{#partial "content"}}
+    <div class="container">
+        <h1>Reserve Vehicle</h1>
+        <hr>
+        <div class="row">
+            <!-- edit form column -->
+            <div class="col-md-9 personal-info">
+                <h3>Personal info</h3>
+                <form action="/confirmreservation" method="post" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Credit Card No.:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="firstName" required value="{{ user.credit_card_number }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Expiration Date:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="lastName" required value="{{ user.credit_card_expiration_date }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Zip Code:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="email" disabled="disabled" value="{{ user.credit_card_zip_code }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Security Code:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="address" required value="{{ user.credit_card_security_code }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Phone number:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control" type="text" name="address" required value="{{ user.phone_number }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label"></label>
+                        <div class="col-md-8">
+                            <button type="submit" class="btn btn-primary">Confirm Reservation</button>
+                        </div>
+                    </div>
+                    {{#if error}}
+                        <label>{{error}}</label>
+                    {{/if}}
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+{{/partial}}
+
+{{> index.hbs}}

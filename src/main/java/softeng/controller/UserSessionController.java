@@ -59,7 +59,10 @@ public class UserSessionController {
             request.session().attribute("registration_is_new", false);
         }
         model.put("registration_is_new", request.session().attribute("registration_is_new"));
-
+        if (request.session().attribute("error") != null) {
+            request.session().attribute("error", false);
+        }
+        model.remove("error");
         return model;
     }
 
@@ -100,9 +103,5 @@ public class UserSessionController {
         } catch (Sql2oException ex) {
             return null;
         }
-    }
-
-    public void updateUserInDB(User toBeUpdated) {
-        userDAO.updateUserInDB(toBeUpdated);
     }
 }

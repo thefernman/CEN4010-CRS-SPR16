@@ -1,0 +1,32 @@
+{{#partial "content"}}
+    <div class="container">
+        <h1>Vehicle detail</h1>
+        <div class="thumbnail">
+        <div class="caption">
+            <div>
+                <h4 class="group inner list-group-item-heading">
+                    type: {{ vehicle.type }}<br>
+                </h4>
+                <p class="group inner list-group-item-heading">
+                    manufacturer: {{ vehicle.manufacturer }}<br>
+                    model: {{ vehicle.model }}<br>
+                    model year: {{ vehicle.year }}<br>
+                    vehicle id: {{ vehicle.id }}<br>
+                </p>
+            </div>
+
+            <form name="myform" action="/reservevehicle" method="POST">
+                <button type="submit" class="btn btn-success" name="confirmation" value={{vehicle.id}}>Reserve car</button>
+            </form>
+            {{#if error}}
+            <div>
+                <br>
+                <label class="col-lg-3 error-label">{{error}}</label>
+            </div>
+            {{/if}}
+        </div>
+        </div>
+        <p><a class="btn btn-default" href="/viewvehicles" role="button">&laquo; Start over</a></p>
+    </div>
+{{/partial}}
+{{>index.hbs}}

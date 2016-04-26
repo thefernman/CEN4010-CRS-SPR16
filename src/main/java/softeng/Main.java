@@ -171,6 +171,11 @@ public class Main {
             return new ModelAndView(model, "editVehicle.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/myreservation", (request, response) -> {
+
+            return new ModelAndView(reservationController.returnUsersReservationVehicles(request), "myreservation.hbs");
+        }, new HandlebarsTemplateEngine());
+
         //add dummy vehicles to database
         vehicleController.populateDBWithDummyCars();
     }

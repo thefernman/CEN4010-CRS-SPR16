@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
    date_of_birth VARCHAR,
    payment_info VARCHAR
 );
-DROP TABLE IF EXISTS vehicles;
+-- DROP TABLE IF EXISTS vehicles;
 CREATE TABLE IF NOT EXISTS vehicles (
    id INTEGER PRIMARY KEY auto_increment,
    type VARCHAR,

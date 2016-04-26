@@ -100,7 +100,7 @@ public class Main {
          */
         get("/viewvehicles", (request, response) -> {
             Map<String, Object> model = userSessionController.getSessionModel(request);
-            model.put("vehicles", vehicleController.getAllVehicles());
+            model.put("all_vehicles", vehicleController.getAllVehicles());
             return new ModelAndView(model, "viewvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -108,33 +108,56 @@ public class Main {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             String type = request.queryParams("selection");
             List<Vehicle> typeSelection = vehicleController.getUnreservedVehicleByType(type);
-            model.put("vehicle", typeSelection);
+            model.put("selected_vehicles", typeSelection);
             return new ModelAndView(model, "displayvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
-        post("/checkout", (request, response) -> {
+        post("/viewvehicledetails", (request, response) -> {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("selection"));
             vehicleController.markAsReserved(vehicleController.getVehicleById(id));
             model.put("vehicle", vehicleController.getVehicleById(id));
-            return new ModelAndView(model, "checkout.hbs");
+            return new ModelAndView(model, "viewvehicledetails.hbs");
         }, new HandlebarsTemplateEngine());
 
-        post("/confirmation", (request, response) -> {
+        post("/reservevehicle", (request, response) -> {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("confirmation"));
+//            request.session().attribute("reserving_vehicle_id",id);
             System.out.println(model.toString());
+            System.out.println("confirmation id: "+id);
+            if (model.get("user") == null) {
+                System.out.println("User is not Logged in");
+                model.put("error", "Please register, or log in if you already have an account");
+                return new ModelAndView(model, "viewvehicledetails.hbs");
+            }else{
+                User curruser = (User)model.get("user");
+                System.out.println(curruser.getId());
+                model.put("vehicle", vehicleController.getVehicleById(id));
+                request.session().attribute("vehicle", vehicleController.getVehicleById(id));
+                return new ModelAndView(model, "reservevehicle.hbs");
+            }
+        }, new HandlebarsTemplateEngine());
+
+        post("/confirmreservation", (request, response) -> {
+            Map<String, Object> model = userSessionController.getSessionModel(request);
+            System.out.println("model: "+model.toString());
+            Vehicle veh = request.session().attribute("vehicle");
+            int id = veh.getId();
+            //int id = Integer.parseInt(request.queryParams("confirmation"));
+            System.out.println("id: "+id);
 
             if (model.get("user") == null) {
                 System.out.println("User is not Logged in");
+                model.put("error", "Please register, or log in if you already have an account");
+                return new ModelAndView(model, "reservevehicle.hbs");
             }else{
                 User curruser = (User)model.get("user");
                 System.out.println(curruser.getId());
                 model.put("vehicle", vehicleController.getVehicleById(id));
                 reservationController.reserveVehicle(id, curruser.getId());
-                return new ModelAndView(model, "confirmation.hbs");
+                return new ModelAndView(model, "confirmreservation.hbs");
             }
-            return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
         /*
@@ -167,6 +190,6 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         //add dummy vehicles to database
-        //vehCont.populateDBWithDummyCars();
+        //vehicleController.populateDBWithDummyCars();
     }
 }

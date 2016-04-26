@@ -4,17 +4,21 @@ CREATE TABLE IF NOT EXISTS users (
    id int PRIMARY KEY auto_increment,
    type VARCHAR DEFAULT 'member',
    email VARCHAR UNIQUE,
+   password VARCHAR,
+   phone_number VARCHAR,
    firstName VARCHAR,
    lastName VARCHAR,
-   password VARCHAR,
    address VARCHAR,
    city VARCHAR,
    state VARCHAR,
    zipCode VARCHAR,
    date_of_birth VARCHAR,
-   payment_info VARCHAR
+   credit_card_number VARCHAR,
+   credit_card_expiration_date VARCHAR,
+   credit_card_zip_code VARCHAR,
+   credit_card_security_code VARCHAR
 );
-DROP TABLE IF EXISTS vehicles;
+-- DROP TABLE IF EXISTS vehicles;
 CREATE TABLE IF NOT EXISTS vehicles (
    id INTEGER PRIMARY KEY auto_increment,
    type VARCHAR,

@@ -1,7 +1,7 @@
 {{#partial "content"}}
-    <h3>Vehicles</h3>
+    <h1>Vehicles</h1>
     <div id="products" class="row list-group">
-    {{#each vehicle}}
+    {{#each selected_vehicles}}
 
             <div class="item  col-xs-4 col-lg-4">
                 <div class="thumbnail">
@@ -16,7 +16,7 @@
                                 <p class="lead">
                                     $21.00 / day</p>
                             </div>
-                            <form name="selctionform" action="/checkout" method="post" class="col-xs-12 col-md-6">
+                            <form name="selctionform" action="/viewvehicledetails" method="post" class="col-xs-12 col-md-6">
                                 <button type="submit" class="btn btn-success" name="selection" value={{ id }}>View details</button>
                             </form>
                         </div>

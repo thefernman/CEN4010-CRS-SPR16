@@ -1,6 +1,6 @@
 {{#partial "content"}}
     <div class="container">
-        <h1>Checkout</h1>
+        <h1>Vehicle detail</h1>
         <div class="thumbnail">
         <div class="caption">
             <div>
@@ -15,9 +15,15 @@
                 </p>
             </div>
 
-            <form name="myform" action="/confirmation" method="POST">
+            <form name="myform" action="/reservevehicle" method="POST">
                 <button type="submit" class="btn btn-success" name="confirmation" value={{vehicle.id}}>Reserve car</button>
             </form>
+            {{#if error}}
+            <div>
+                <br>
+                <label class="col-lg-3 error-label">{{error}}</label>
+            </div>
+            {{/if}}
         </div>
         </div>
         <p><a class="btn btn-default" href="/viewvehicles" role="button">&laquo; Start over</a></p>

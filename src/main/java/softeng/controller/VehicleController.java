@@ -35,8 +35,25 @@ public class VehicleController {
         return vehDAO.findAllByType(type);
     }
 
-    public List<Vehicle> getUnreservedVehicleByType(String type){
+    public List<Vehicle> getUnreservedVehiclesByType(String type){
         List<Vehicle> all = vehDAO.findAllByType(type);
+
+        for (int i = 0; i < all.size(); i++) {
+            System.out.println(all.get(i).getInfo());
+        }
+
+        for (int i = 0; i < all.size(); i++) {
+            if (all.get(i).isReserved()){
+                System.out.println(all.get(i).getInfo() + " was removed from available list");
+                all.remove(i);
+                i--;
+            }
+        }
+        return all;
+    }
+
+    public List<Vehicle> getAllUnreservedVehicles(){
+        List<Vehicle> all = vehDAO.findAll();
 
         for (int i = 0; i < all.size(); i++) {
             System.out.println(all.get(i).getInfo());

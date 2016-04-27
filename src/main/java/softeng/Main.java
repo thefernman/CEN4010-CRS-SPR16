@@ -81,6 +81,7 @@ public class Main {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             User user = (User) model.get("user");
             System.out.println(user);
+            response.redirect("/");
             return new ModelAndView(model, request.session().attribute("previous_page"));
         }, new HandlebarsTemplateEngine());
 

@@ -19,6 +19,15 @@ public class Vehicle {
         this.model = model;
     }
 
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "year=" + year +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", model='" + model + '\'' +
+                '}';
+    }
+
     public int getId() {
         return id;
     }

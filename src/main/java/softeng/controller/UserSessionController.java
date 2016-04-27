@@ -54,7 +54,6 @@ public class UserSessionController {
 
     public Map<String, Object> getSessionModel(Request request) {
         Map<String, Object> model = new HashMap<>();
-
         model.put("user", request.session().attribute("user"));
         model.put("vehicle", request.session().attribute("vehicle"));
 
@@ -72,10 +71,13 @@ public class UserSessionController {
     }
 
     public boolean loginUser(Request request) {
+        String email = request.queryParams("email");
+        String password = request.queryParams("password");
         try {
-            String email = request.queryParams("email");
-            if (userDAO.verifyUserLogin(email,request.queryParams("password"))) {
+
+            if (userDAO.verifyUserLogin(email,password)) {
                 request.session().attribute("user", findByEmail(email));
+                System.out.println(request.session().attribute("user").toString());
                 return true;
             }
         } catch (DAOException ex) {

@@ -1,14 +1,44 @@
 {{#partial "content"}}
     <div class="container">
-    <h2>Browse by type</h2>
+        <h2>Browse by type</h2>
         <div>
             <form name="myform" action="/displayvehicles" method="POST">
-                <button type="submit" class="btn btn-success" name="selection" value="compact">Compact</button>
-                <button type="submit" class="btn btn-success" name="selection" value="midsize">Mid Size Sedan</button>
-                <button type="submit" class="btn btn-success" name="selection" value="suv">SUV</button>
+                <button type="submit" class="btn btn-success" name="selection" value="Compact">Compact</button>
+                <button type="submit" class="btn btn-success" name="selection" value="Midsize">Mid Size Sedan</button>
+                <button type="submit" class="btn btn-success" name="selection" value="SUV">SUV</button>
             </form>
         </div>
     </div>
+    <br>
+    <div class="container">
+        <div id="products" class="row list-group">
+            {{#each all_vehicles}}
+                <div class="item  col-xs-4 col-lg-4">
+                    <div class="thumbnail">
+                        <img class="group list-group-image" src="images/{{ id }}.jpg" alt=""/>
+                        <div class="caption">
+                            <p class="group inner list-group-item-text">
+                                {{ year }} {{ manufacturer }} {{ model }}</p>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <p class="lead">
+                                        $21.00 / day</p>
+                                </div>
+                                <form name="selctionform" action="/viewvehicledetails" method="post"
+                                      class="col-xs-12 col-md-6">
+                                    <button type="submit" class="btn btn-success" name="selection" value={{ id }}>View
+                                        details
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {{/each}}
+        </div>
+    </div>
+
 {{/partial}}
 
 {{>index.hbs}}

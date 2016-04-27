@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNotEquals;
  */
 public class Sql2oUserDAOTest {
 
+
     private Sql2oUserDAO userDAO;
     private Connection conn;
 
@@ -51,6 +52,14 @@ public class Sql2oUserDAOTest {
     @Test
     public void noUserReturnEmptyList() throws Exception {
         assertEquals(0, userDAO.findAll().size());
+    }
+
+    @Test
+    public void verifyUserLogin() throws Exception {
+        User user = newTestUser();
+        userDAO.add(user);
+        assertEquals(true, userDAO.verifyUserLogin(user.getEmail(), user.getPassword()));
+
     }
 
     private User newTestUser() {

@@ -1,33 +1,45 @@
 {{#partial "content"}}
-    <h2>Vehicles</h2>
-    <div id="products" class="row list-group">
-    {{#each selected_vehicles}}
+    <div class="container">
+        <h2>Browse by type</h2>
+        <div>
+            <form name="myform" action="/displayvehicles" method="POST">
+                <button type="submit" class="btn btn-success" name="selection" value="Compact">Compact</button>
+                <button type="submit" class="btn btn-success" name="selection" value="Midsize">Mid Size Sedan</button>
+                <button type="submit" class="btn btn-success" name="selection" value="SUV">SUV</button>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Vehicles</h2>
+        <div id="products" class="row list-group">
+            {{#each selected_vehicles}}
 
-            <div class="item  col-xs-4 col-lg-4">
-                <div class="thumbnail">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                    <!--<img class="group list-group-image" src="http://loremflickr.com/40{{ id }}/25{{ id }}/car" alt="" />-->
-                    <div class="caption">
-                        <h4 class="group inner list-group-item-heading">
-                            {{ type }}</h4>
-                        <p class="group inner list-group-item-text">
-                            {{ manufacturer }} {{ model }}</p>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <p class="lead">
-                                    $21.00 / day</p>
+                <div class="item  col-xs-4 col-lg-4">
+                    <div class="thumbnail">
+                        <img class="group list-group-image" src="images/{{ id }}.jpg" alt=""/>
+                        <div class="caption">
+                            <p class="group inner list-group-item-text">
+                                {{ year }} {{ manufacturer }} {{ model }}</p>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <p class="lead">
+                                        $21.00 / day</p>
+                                </div>
+                                <form name="selctionform" action="/viewvehicledetails" method="post"
+                                      class="col-xs-12 col-md-6">
+                                    <button type="submit" class="btn btn-success" name="selection" value={{ id }}>View
+                                        details
+                                    </button>
+                                </form>
                             </div>
-                            <form name="selctionform" action="/viewvehicledetails" method="post" class="col-xs-12 col-md-6">
-                                <button type="submit" class="btn btn-success" name="selection" value={{ id }}>View details</button>
-                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
 
-    {{/each}}
+            {{/each}}
+        </div>
+        <p><a class="btn btn-default" href="/viewvehicles" role="button">&laquo; Start over</a></p>
     </div>
-    <p><a class="btn btn-default" href="/viewvehicles" role="button">&laquo; Start over</a></p>
 {{/partial}}
 
 {{>index.hbs}}

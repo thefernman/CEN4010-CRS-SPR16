@@ -48,10 +48,6 @@ public class Main {
             Home Page Route
          */
         get("/", (request, response) -> {
-
-            List<User> all = userSessionController.findAll();
-            System.out.println("hello");
-
             //returned model map may have zero entries
             request.session().attribute("previous_page","index.hbs");
             return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
@@ -129,10 +125,10 @@ public class Main {
 
             request.session().attribute("previous_page","viewvehicledetails.hbs");
 
-            User curruser = request.session().attribute("user");
-            System.out.println("user type: " + curruser.getType());
-            System.out.println("user isAdmin: " + curruser.isAdmin());
-            System.out.println("user isMember: " + curruser.isMember());
+//            User curruser = request.session().attribute("user");
+//            System.out.println("user type: " + curruser.getType());
+//            System.out.println("user isAdmin: " + curruser.isAdmin());
+//            System.out.println("user isMember: " + curruser.isMember());
 
             return new ModelAndView(model, "viewvehicledetails.hbs");
         }, new HandlebarsTemplateEngine());
@@ -163,7 +159,7 @@ public class Main {
 
         post("/confirmreservation", (request, response) -> {
             Map<String, Object> model = userSessionController.getSessionModel(request);
-            System.out.println("model: "+model.toString());
+            System.out.println("model: "+ model.toString());
             //why is the string empty
             Vehicle desired_vehicle = request.session().attribute("vehicle");
             //int id = Integer.parseInt(request.queryParams("confirmation"));
@@ -220,6 +216,6 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         //add dummy vehicles to database
-        vehicleController.populateDBWithDummyCars();
+//        vehicleController.populateDBWithDummyCars();
     }
 }

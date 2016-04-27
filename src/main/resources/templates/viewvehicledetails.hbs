@@ -3,14 +3,12 @@
         <h2>Details</h2>
         <div class="thumbnail">
             <div class="caption">
+                <img class="group list-group-image" src="images/{{ vehicle.id }}.jpg" alt="" />
                 <h4 class="group inner list-group-item-heading">
-                    type: {{ vehicle.type }}<br>
+                    {{ vehicle.type }}<br>
                 </h4>
                 <p class="group inner list-group-item-heading">
-                    manufacturer: {{ vehicle.manufacturer }}<br>
-                    model: {{ vehicle.model }}<br>
-                    model year: {{ vehicle.year }}<br>
-                    vehicle id: {{ vehicle.id }}<br>
+                    {{ vehicle.year }} {{ vehicle.manufacturer }} {{ vehicle.model }}<br>
                 </p>
                 <form name="myform" action="/reservevehicle" method="POST">
                     <button type="submit" class="btn btn-success" name="confirmation" value={{vehicle.id}}>Reserve car</button>

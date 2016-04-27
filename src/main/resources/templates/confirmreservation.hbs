@@ -1,5 +1,10 @@
 {{#partial "content"}}
-<h1>Woo {{ user_email }}, you have reserved {{vehicle.model}}!</h1>
+    <div class="container">
+        <p> <h3> Woo! {{#if user.firstName }}{{ user.firstName }}{{else}}{{ user.email }}{{/if}}, you have
+        reserved {{ vehicle.year }} {{vehicle.manufacturer }} {{vehicle.model}}!</h3>
+        </p>
+    </div>
+
 {{/partial}}
 
 {{>index.hbs}}

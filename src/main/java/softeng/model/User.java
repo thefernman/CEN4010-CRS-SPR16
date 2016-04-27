@@ -13,6 +13,10 @@ public class User {
     private int zipCode;
     private String date_of_birth;
     private String payment_info;
+    private String credit_card_number;
+    private String credit_card_expiration_date;
+    private String credit_card_zip_code;
+    private String credit_card_security_code;
 
     private boolean isAdmin;
     private boolean isMember;
@@ -130,19 +134,51 @@ public class User {
         this.zipCode = zipCode;
     }
 
-    public String getDate_of_birth() {
+    public String getDateOfBirth() {
         return date_of_birth;
     }
 
-    public void setDate_of_birth(String date_of_birth) {
+    public void setDateOfBirth(String date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
 
-    public String getPayment_info() {
+//    public String getPaymentInfo() {
+//        return payment_info;
+//    }
+
+//    public void setPayment_info(String payment_info) {
+//        this.payment_info = payment_info;
+//    }
+
+    public String getCreditCardNumber() {
+        return credit_card_number;
+    }
+
+    public void setCreditCardNumber(String credit_card_number) {
+        this.credit_card_number = credit_card_number;
+    }
+
+    public String getCreditCardExporationDate() {
+        return credit_card_expiration_date;
+    }
+
+    public void setCreditCardExporationDate(String credit_card_expiration_date) {
+        this.credit_card_expiration_date = credit_card_expiration_date;
+    }
+
+    public String getCreditCardZipCode() {
+        return credit_card_zip_code;
+    }
+
+    public void setCreditCardZipCode(String credit_card_zip_code) {
+        this.credit_card_zip_code = credit_card_zip_code;
+    }
+
+    public String getCreditCardSecurityCode() {
         return payment_info;
     }
 
-    public void setPayment_info(String payment_info) {
-        this.payment_info = payment_info;
+    public void setCreditCardSecurityCode(String credit_card_security_code) {
+        this.credit_card_security_code = credit_card_security_code;
     }
 }

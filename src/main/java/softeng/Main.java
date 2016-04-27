@@ -60,7 +60,7 @@ public class Main {
             Registration Route
          */
         get("/registration", (request, response) -> {
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
+            request.session().attribute("previous_page","registration.hbs");
             return new ModelAndView(userSessionController.getSessionModel(request), "registration.hbs"); //returned model map may have zero entries
         }, new HandlebarsTemplateEngine());
 
@@ -71,7 +71,7 @@ public class Main {
                 model = userSessionController.getSessionModel(request);
                 model.put("registration_is_new",true); //if new registration, display welcome on /registration
             }
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
+            request.session().attribute("previous_page","registration.hbs");
             return new ModelAndView(model, "registration.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -107,7 +107,7 @@ public class Main {
         get("/viewvehicles", (request, response) -> {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             model.put("all_vehicles", vehicleController.getAllVehicles());
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
+            request.session().attribute("previous_page","viewvehicles.hbs");
             return new ModelAndView(model, "viewvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -116,7 +116,7 @@ public class Main {
             String type = request.queryParams("selection");
             List<Vehicle> typeSelection = vehicleController.getUnreservedVehicleByType(type);
             model.put("selected_vehicles", typeSelection);
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
+            request.session().attribute("previous_page","displayvehicles.hbs");
             return new ModelAndView(model, "displayvehicles.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -171,7 +171,7 @@ public class Main {
             //why is the string empty
             Vehicle desired_vehicle = request.session().attribute("vehicle");
             //int id = Integer.parseInt(request.queryParams("confirmation"));
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
+            request.session().attribute("previous_page","confirmreservation.hbs");
 
 //            if (model.get("user") == null) {
 //                //System.out.println("User is not Logged in");
@@ -197,7 +197,7 @@ public class Main {
 //        }, new HandlebarsTemplateEngine());
 
         get("/editprofile", (request, response) -> {
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
+            request.session().attribute("previous_page","editprofile.hbs");
             return new ModelAndView(userSessionController.getSessionModel(request), "editProfile.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -214,12 +214,12 @@ public class Main {
             Vehicle toBeEdited = vehicleController.getVehicleById(vehicle_id);
             System.out.println("from get editvehicle: " + toBeEdited);
             model.put("vehicle", toBeEdited);
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
-            return new ModelAndView(model, "editVehicle.hbs");
+            request.session().attribute("previous_page","editvehicle.hbs");
+            return new ModelAndView(model, "editvehicle.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/myreservations", (request, response) -> {
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
+            request.session().attribute("previous_page","myreservations.hbs");
             return new ModelAndView(reservationController.returnUsersReservationVehicles(request), "myreservations.hbs");
         }, new HandlebarsTemplateEngine());
 

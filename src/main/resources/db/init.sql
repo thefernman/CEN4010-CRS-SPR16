@@ -13,10 +13,11 @@ CREATE TABLE IF NOT EXISTS users (
    state VARCHAR,
    zipCode VARCHAR,
    date_of_birth VARCHAR,
---    credit_card_number VARCHAR,
---    credit_card_expiration_date VARCHAR,
---    credit_card_zip_code VARCHAR,
---    credit_card_security_code VARCHAR
+  -- payment_info VARCHAR,
+   credit_card_number VARCHAR,
+   credit_card_expiration_date VARCHAR,
+   credit_card_zip_code VARCHAR,
+   credit_card_security_code VARCHAR
 );
 -- DROP TABLE IF EXISTS vehicles;
 CREATE TABLE IF NOT EXISTS vehicles (

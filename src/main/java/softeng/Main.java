@@ -217,6 +217,6 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         //add dummy vehicles to database
-//        vehicleController.populateDBWithDummyCars();
+        //vehicleController.populateDBWithDummyCars();
     }
 }

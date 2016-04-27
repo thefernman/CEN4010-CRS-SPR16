@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
    state VARCHAR,
    zipCode VARCHAR,
    date_of_birth VARCHAR,
+  -- payment_info VARCHAR,
    credit_card_number VARCHAR,
    credit_card_expiration_date VARCHAR,
    credit_card_zip_code VARCHAR,

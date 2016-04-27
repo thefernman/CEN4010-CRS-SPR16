@@ -38,9 +38,7 @@ public class VehicleController {
     public List<Vehicle> getUnreservedVehiclesByType(String type){
         List<Vehicle> all = vehDAO.findAllByType(type);
 
-        for (int i = 0; i < all.size(); i++) {
-            System.out.println(all.get(i).getInfo());
-        }
+        all.forEach(System.out::println);
 
         for (int i = 0; i < all.size(); i++) {
             if (all.get(i).isReserved()){

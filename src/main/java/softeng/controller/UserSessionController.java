@@ -26,6 +26,8 @@ public class UserSessionController {
         User user = new User(email, password);
         try {
             userDAO.add(user);
+            user.setAsAdmin();
+            user.setAsMember();
             return user;
         } catch (DAOException ex) {
             throw ex;
@@ -54,21 +56,25 @@ public class UserSessionController {
         Map<String, Object> model = new HashMap<>();
 
         model.put("user", request.session().attribute("user"));
+        model.put("vehicle", request.session().attribute("vehicle"));
 
         if (request.session().attribute("registration_is_new") != null) {
             request.session().attribute("registration_is_new", false);
         }
-        model.put("registration_is_new", request.session().attribute("registration_is_new"));
+        model.remove("registration_is_new");
+
         if (request.session().attribute("error") != null) {
             request.session().attribute("error", false);
         }
         model.remove("error");
+
         return model;
     }
 
-    public boolean loginUser(Request request, String email, String password) {
+    public boolean loginUser(Request request) {
         try {
-            if (userDAO.verifyUserLogin(email, password)) {
+            String email = request.queryParams("email");
+            if (userDAO.verifyUserLogin(email,request.queryParams("password"))) {
                 request.session().attribute("user", findByEmail(email));
                 return true;
             }

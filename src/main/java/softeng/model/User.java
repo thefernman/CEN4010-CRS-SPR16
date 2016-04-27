@@ -14,6 +14,9 @@ public class User {
     private String date_of_birth;
     private String payment_info;
 
+    private boolean isAdmin;
+    private boolean isMember;
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
@@ -45,12 +48,23 @@ public class User {
     public void setType(String type) {
         this.type = type;
     }
-
+    public void setAsAdmin(){
+        if (type.equals("admin")) { isAdmin = true; } else { isAdmin = false; }
+    }
+    public void setAsMember(){
+        if (type.equals("member")) { isMember = true; } else { isMember = false; }
+    }
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+    public boolean isMember() {
+        return isMember;
+    }
     /* The Handlebars {{#if}} expression tests for truth only. We can circumvent this
        limitation by either creating helpers or by creating these boolean functions */
-    public boolean isAdmin(){ return type.equals("admin"); }
+//    public boolean isAdmin(){ return isAdmin; }
 
-    public boolean isMember(){ return type.equals("member"); }
+//    public boolean isMember(){ return isMember; }
 
     public String getEmail() {
         return email;

@@ -1,6 +1,6 @@
 {{#partial "content"}}
     <div class="container">
-        <h1>Reserve Vehicle</h1>
+        <h2>Reserve Vehicle</h2>
         <hr>
         <div class="row">
             <!-- edit form column -->
@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label"></label>
                         <div class="col-md-8">
-                            <button type="submit" class="btn btn-primary">Confirm Reservation</button>
+                            <button type="submit" class="btn btn-primary" name="confirmation" value="{{vehicle.id}}">Confirm Reservation</button>
                         </div>
                     </div>
                     {{#if error}}

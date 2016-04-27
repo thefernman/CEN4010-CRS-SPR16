@@ -38,6 +38,7 @@ public class UserSessionController {
         String address = request.queryParams("address");
         String city = request.queryParams("city");
         String state = request.queryParams("state");
+        String phone_number =request.queryParams("phone_number");
 
         User toBeUpdated = request.session().attribute("user");
 
@@ -46,13 +47,13 @@ public class UserSessionController {
         toBeUpdated.setAddress(address);
         toBeUpdated.setCity(city);
         toBeUpdated.setState(state);
+        toBeUpdated.setPhone_number(phone_number);
 
         userDAO.updateUserInDB(toBeUpdated);
     }
 
     public Map<String, Object> getSessionModel(Request request) {
         Map<String, Object> model = new HashMap<>();
-
         model.put("user", request.session().attribute("user"));
 
         if (request.session().attribute("registration_is_new") != null) {
@@ -66,7 +67,10 @@ public class UserSessionController {
         return model;
     }
 
-    public boolean loginUser(Request request, String email, String password) {
+    public boolean loginUser(Request request) {
+        System.out.println("from loginUser session controller");
+        String email = request.queryParams("email");
+        String password = request.queryParams("password");
         try {
             if (userDAO.verifyUserLogin(email, password)) {
                 request.session().attribute("user", findByEmail(email));

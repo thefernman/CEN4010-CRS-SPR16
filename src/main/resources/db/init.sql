@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS vehicles (
    reserved boolean
 );
 
+-- DROP TABLE IF EXISTS reservations;
 CREATE TABLE IF NOT EXISTS reservations (
    id INTEGER PRIMARY KEY auto_increment,
    vehicle_id INTEGER,

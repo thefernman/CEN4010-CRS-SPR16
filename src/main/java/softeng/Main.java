@@ -80,17 +80,9 @@ public class Main {
          */
         //TODO: when a user logs in, return them to the page they were originally on with the state preserved instead of index.hbs
         post("/sign-in", (request, response) -> {
-            userSessionController.loginUser(request,request.queryParams("email"),request.queryParams("password"));
-            return new ModelAndView(userSessionController.getSessionModel(request), request.session().attribute("previous_page"));
+            userSessionController.loginUser(request);
+            return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs"/*request.session().attribute("previous_page")*/);
         }, new HandlebarsTemplateEngine());
-
-//        get("/sign-out", (request, response) -> {
-//            for (String attr : request.session().attributes()){
-//                System.out.println("removing attr: " + request.session().attribute(attr));
-//                request.session().removeAttribute(attr);
-//            }
-//            return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
-//        }, new HandlebarsTemplateEngine());
 
         get("/sign-out", (request, response) -> {
             for (String attr : request.session().attributes()){
@@ -206,6 +198,6 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         //add dummy vehicles to database
-        //vehicleController.populateDBWithDummyCars();
+//        vehicleController.populateDBWithDummyCars();
     }
 }

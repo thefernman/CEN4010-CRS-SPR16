@@ -7,6 +7,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String password;
+    private String phone_number;
     private String address;
     private String city;
     private String state;
@@ -17,6 +18,7 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+        setType("Member");
     }
     public int getId() {
         return id;
@@ -130,5 +132,13 @@ public class User {
 
     public void setPayment_info(String payment_info) {
         this.payment_info = payment_info;
+    }
+
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 }

@@ -44,13 +44,14 @@ public class Main {
         }
 
 
-        //In case we use json objects..
-        Gson gson = new Gson();
-
         /*
             Home Page Route
          */
         get("/", (request, response) -> {
+
+            List<User> all = userSessionController.findAll();
+            System.out.println("hello");
+
             //returned model map may have zero entries
             request.session().attribute("previous_page","index.hbs");
             return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
@@ -81,18 +82,13 @@ public class Main {
         //TODO: when a user logs in, return them to the page they were originally on with the state preserved instead of index.hbs
         post("/sign-in", (request, response) -> {
             userSessionController.loginUser(request);
-            return new ModelAndView(userSessionController.getSessionModel(request), request.session().attribute("previous_page"));
+            Map<String, Object> model = userSessionController.getSessionModel(request);
+            User user = (User) model.get("user");
+            System.out.println(user);
+            return new ModelAndView(model, request.session().attribute("previous_page"));
         }, new HandlebarsTemplateEngine());
 
-//        get("/sign-out", (request, response) -> {
-//            for (String attr : request.session().attributes()){
-//                System.out.println("removing attr: " + request.session().attribute(attr));
-//                request.session().removeAttribute(attr);
-//            }
-//            return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
-//        }, new HandlebarsTemplateEngine());
-
-//TODO: when the user signs out, unmark-for-reservation any vehicles that were not confirmed by the user
+        //TODO: when the user signs out, unmark-for-reservation any vehicles that were not confirmed by the user
         get("/sign-out", (request, response) -> {
             for (String attr : request.session().attributes()){
                 System.out.println("removing attr: " + request.session().attribute(attr));
@@ -224,6 +220,6 @@ public class Main {
         }, new HandlebarsTemplateEngine());
 
         //add dummy vehicles to database
-        //vehicleController.populateDBWithDummyCars();
+        vehicleController.populateDBWithDummyCars();
     }
 }

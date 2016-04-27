@@ -44,8 +44,14 @@ public class Sql2oUserDAO implements UserDAO {
     @Override
     public List<User> findAll() {
         try (Connection con = sql2o.open()) {
-            return con.createQuery("SELECT * FROM users")
+            List<User> users = con.createQuery("SELECT * FROM users")
                     .executeAndFetch(User.class);
+
+            return users;
+        }
+        catch (Sql2oException ex) {
+            ex.printStackTrace();
+            return null;
         }
     }
 

@@ -26,6 +26,8 @@ public class UserSessionController {
         User user = new User(email, password);
         try {
             userDAO.add(user);
+            user.setAsAdmin();
+            user.setAsMember();
             return user;
         } catch (DAOException ex) {
             throw ex;
@@ -38,7 +40,6 @@ public class UserSessionController {
         String address = request.queryParams("address");
         String city = request.queryParams("city");
         String state = request.queryParams("state");
-        String phone_number =request.queryParams("phone_number");
 
         User toBeUpdated = request.session().attribute("user");
 
@@ -47,7 +48,6 @@ public class UserSessionController {
         toBeUpdated.setAddress(address);
         toBeUpdated.setCity(city);
         toBeUpdated.setState(state);
-        toBeUpdated.setPhone_number(phone_number);
 
         userDAO.updateUserInDB(toBeUpdated);
     }
@@ -55,24 +55,25 @@ public class UserSessionController {
     public Map<String, Object> getSessionModel(Request request) {
         Map<String, Object> model = new HashMap<>();
         model.put("user", request.session().attribute("user"));
+        model.put("vehicle", request.session().attribute("vehicle"));
 
         if (request.session().attribute("registration_is_new") != null) {
             request.session().attribute("registration_is_new", false);
         }
-        model.put("registration_is_new", request.session().attribute("registration_is_new"));
+        model.remove("registration_is_new");
+
         if (request.session().attribute("error") != null) {
             request.session().attribute("error", false);
         }
         model.remove("error");
+
         return model;
     }
 
     public boolean loginUser(Request request) {
-        System.out.println("from loginUser session controller");
-        String email = request.queryParams("email");
-        String password = request.queryParams("password");
         try {
-            if (userDAO.verifyUserLogin(email, password)) {
+            String email = request.queryParams("email");
+            if (userDAO.verifyUserLogin(email,request.queryParams("password"))) {
                 request.session().attribute("user", findByEmail(email));
                 return true;
             }

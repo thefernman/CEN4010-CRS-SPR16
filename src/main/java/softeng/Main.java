@@ -81,9 +81,18 @@ public class Main {
         //TODO: when a user logs in, return them to the page they were originally on with the state preserved instead of index.hbs
         post("/sign-in", (request, response) -> {
             userSessionController.loginUser(request);
-            return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs"/*request.session().attribute("previous_page")*/);
+            return new ModelAndView(userSessionController.getSessionModel(request), request.session().attribute("previous_page"));
         }, new HandlebarsTemplateEngine());
 
+//        get("/sign-out", (request, response) -> {
+//            for (String attr : request.session().attributes()){
+//                System.out.println("removing attr: " + request.session().attribute(attr));
+//                request.session().removeAttribute(attr);
+//            }
+//            return new ModelAndView(userSessionController.getSessionModel(request), "index.hbs");
+//        }, new HandlebarsTemplateEngine());
+
+//TODO: when the user signs out, unmark-for-reservation any vehicles that were not confirmed by the user
         get("/sign-out", (request, response) -> {
             for (String attr : request.session().attributes()){
                 System.out.println("removing attr: " + request.session().attribute(attr));
@@ -114,9 +123,21 @@ public class Main {
         post("/viewvehicledetails", (request, response) -> {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("selection"));
-            vehicleController.markAsReserved(vehicleController.getVehicleById(id));
-            model.put("vehicle", vehicleController.getVehicleById(id));
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
+
+            Vehicle desired_vehicle = request.session().attribute("vehicle");
+            if(desired_vehicle == null){
+                desired_vehicle = vehicleController.getVehicleById(id);
+            }
+            model.put("vehicle", desired_vehicle);
+            request.session().attribute("vehicle", desired_vehicle);
+
+            request.session().attribute("previous_page","viewvehicledetails.hbs");
+
+            User curruser = request.session().attribute("user");
+            System.out.println("user type: " + curruser.getType());
+            System.out.println("user isAdmin: " + curruser.isAdmin());
+            System.out.println("user isMember: " + curruser.isMember());
+
             return new ModelAndView(model, "viewvehicledetails.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -124,17 +145,22 @@ public class Main {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             int id = Integer.parseInt(request.queryParams("confirmation"));
             System.out.println(model.toString());
-            request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
 
-            if (model.get("user") == null) {
+            User curruser = (User)model.get("user");
+
+            Vehicle desired_vehicle = vehicleController.getVehicleById(id);
+            model.put("vehicle", desired_vehicle);
+            request.session().attribute("vehicle", desired_vehicle);
+
+            if (curruser == null) {
                 System.out.println("User is not Logged in");
                 model.put("error", "Please register, or log in if you already have an account");
+                request.session().attribute("previous_page","viewvehicledetails.hbs");
                 return new ModelAndView(model, "viewvehicledetails.hbs");
             }else{
-                User curruser = (User)model.get("user");
                 System.out.println(curruser.getId());
-                model.put("vehicle", vehicleController.getVehicleById(id));
-                request.session().attribute("vehicle", vehicleController.getVehicleById(id));
+                vehicleController.markAsReserved(desired_vehicle);
+                request.session().attribute("previous_page","reservevehicle.hbs");
                 return new ModelAndView(model, "reservevehicle.hbs");
             }
         }, new HandlebarsTemplateEngine());
@@ -142,23 +168,23 @@ public class Main {
         post("/confirmreservation", (request, response) -> {
             Map<String, Object> model = userSessionController.getSessionModel(request);
             System.out.println("model: "+model.toString());
-            Vehicle veh = request.session().attribute("vehicle");
-            int id = veh.getId();
+            //why is the string empty
+            Vehicle desired_vehicle = request.session().attribute("vehicle");
             //int id = Integer.parseInt(request.queryParams("confirmation"));
-            System.out.println("id: "+id);
             request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
 
-            if (model.get("user") == null) {
-                System.out.println("User is not Logged in");
-                model.put("error", "Please register, or log in if you already have an account");
-                return new ModelAndView(model, "reservevehicle.hbs");
-            }else{
+//            if (model.get("user") == null) {
+//                //System.out.println("User is not Logged in");
+//                model.put("error", "Please register, or log in if you already have an account");
+//                return new ModelAndView(model, "reservevehicle.hbs");
+//            }else{
                 User curruser = (User)model.get("user");
                 System.out.println(curruser.getId());
-                model.put("vehicle", vehicleController.getVehicleById(id));
-                reservationController.reserveVehicle(id, curruser.getId());
+                model.put("vehicle", desired_vehicle);
+                System.out.println("reserving vehicle with id: "+desired_vehicle.getId());
+                reservationController.reserveVehicle(desired_vehicle.getId(), curruser.getId());
                 return new ModelAndView(model, "confirmreservation.hbs");
-            }
+//            }
         }, new HandlebarsTemplateEngine());
 
         /*
@@ -192,12 +218,12 @@ public class Main {
             return new ModelAndView(model, "editVehicle.hbs");
         }, new HandlebarsTemplateEngine());
 
-        get("/myreservation", (request, response) -> {
+        get("/myreservations", (request, response) -> {
             request.session().attribute("previous_page",request.url().substring(url_prefix.length())+".hbs");
-            return new ModelAndView(reservationController.returnUsersReservationVehicles(request), "myreservation.hbs");
+            return new ModelAndView(reservationController.returnUsersReservationVehicles(request), "myreservations.hbs");
         }, new HandlebarsTemplateEngine());
 
         //add dummy vehicles to database
-//        vehicleController.populateDBWithDummyCars();
+        //vehicleController.populateDBWithDummyCars();
     }
 }

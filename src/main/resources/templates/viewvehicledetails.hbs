@@ -1,9 +1,8 @@
 {{#partial "content"}}
     <div class="container">
-        <h1>Vehicle detail</h1>
+        <h2>Details</h2>
         <div class="thumbnail">
-        <div class="caption">
-            <div>
+            <div class="caption">
                 <h4 class="group inner list-group-item-heading">
                     type: {{ vehicle.type }}<br>
                 </h4>
@@ -13,18 +12,18 @@
                     model year: {{ vehicle.year }}<br>
                     vehicle id: {{ vehicle.id }}<br>
                 </p>
+                <form name="myform" action="/reservevehicle" method="POST">
+                    <button type="submit" class="btn btn-success" name="confirmation" value={{vehicle.id}}>Reserve car</button>
+                </form>
+                {{#if user.isMember}}
+                <a class="btn btn-default" href="/editvehicle" role="button">Edit</a>
+                {{/if}}
+                {{#if error}}
+                    <br>
+                    <label class="group inner list-group-item-heading error-label">{{error}}</label>
+                    <br>
+                {{/if}}
             </div>
-
-            <form name="myform" action="/reservevehicle" method="POST">
-                <button type="submit" class="btn btn-success" name="confirmation" value={{vehicle.id}}>Reserve car</button>
-            </form>
-            {{#if error}}
-            <div>
-                <br>
-                <label class="col-lg-3 error-label">{{error}}</label>
-            </div>
-            {{/if}}
-        </div>
         </div>
         <p><a class="btn btn-default" href="/viewvehicles" role="button">&laquo; Start over</a></p>
     </div>

@@ -51,13 +51,9 @@ public class ReservationController {
     public Map<String, Object> returnUsersReservationVehicles(Request request) {
         Map<String, Object> model = new HashMap<>();
         User user= request.session().attribute("user");
-        int id = user.getId();
         List<Reservation> userReservation = getReservationByUserId(user.getId());
-
         List<Vehicle> userVehicles= new ArrayList<>();
-
         userReservation.forEach(veh -> userVehicles.add(vehicleDAO.findById(veh.getId())));
-
         model.put("vehicles", userVehicles);
         return model;
     }

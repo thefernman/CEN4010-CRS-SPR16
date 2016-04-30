@@ -7,72 +7,55 @@ import softeng.exc.DAOException;
 import softeng.model.Vehicle;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Fernando on 4/13/2016.
  */
 public class VehicleController {
 
-    private VehicleDAO vehDAO;
+    private VehicleDAO vehicleDAO;
 
     public VehicleController(Sql2o sql2o) {
-        vehDAO = new Sql2oVehicleDAO(sql2o);
+        vehicleDAO = new Sql2oVehicleDAO(sql2o);
     }
 
     public void addVehicle(Vehicle vehicle) {
         try {
-            vehDAO.add(vehicle);
+            vehicleDAO.add(vehicle);
         } catch (DAOException e) {
             e.printStackTrace();
         }
     }
 
     public List<Vehicle> getAllVehicles(){
-       return vehDAO.findAll();
+       return vehicleDAO.findAll();
     }
 
     public List<Vehicle> getVehicleByType(String type){
-        return vehDAO.findAllByType(type);
+        return vehicleDAO.findAllByType(type);
     }
 
     public List<Vehicle> getUnreservedVehiclesByType(String type){
-        List<Vehicle> all = vehDAO.findAllByType(type);
-
-        all.forEach(System.out::println);
-
-        for (int i = 0; i < all.size(); i++) {
-            if (all.get(i).isReserved()){
-                System.out.println(all.get(i).getInfo() + " was removed from available list");
-                all.remove(i);
-                i--;
-            }
-        }
-        return all;
+        return vehicleDAO.findAllByType(type)
+                .stream()
+                .filter(vehicle -> !vehicle.isReserved())
+                .collect(Collectors.toList());
     }
 
     public List<Vehicle> getAllUnreservedVehicles(){
-        List<Vehicle> all = vehDAO.findAll();
-
-        for (int i = 0; i < all.size(); i++) {
-            System.out.println(all.get(i).getInfo());
-        }
-
-        for (int i = 0; i < all.size(); i++) {
-            if (all.get(i).isReserved()){
-                System.out.println(all.get(i).getInfo() + " was removed from available list");
-                all.remove(i);
-                i--;
-            }
-        }
-        return all;
+        return vehicleDAO.findAll()
+                .stream()
+                .filter(vehicle -> !vehicle.isReserved())
+                .collect(Collectors.toList());
     }
 
     public Vehicle getVehicleById(int id){
-        return vehDAO.findById(id);
+        return vehicleDAO.findById(id);
     }
 
-    public void markAsReserved(Vehicle veh){
-        veh.setReserved(true);
-        vehDAO.updateVehicleInDB(veh);
+    public void markAsReserved(Vehicle vehicle){
+        vehicle.setReserved(true);
+        vehicleDAO.updateVehicleInDB(vehicle);
     }
 }
